@@ -6,12 +6,11 @@ plugins {
 
 android {
     namespace = "com.mzaragozaserrano.idealista"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.mzaragozaserrano.idealista"
         minSdk = 24
-        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
