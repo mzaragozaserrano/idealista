@@ -1,7 +1,7 @@
 package com.mzaragozaserrano.data.utils
 
 import com.mzaragozaserrano.data.dto.AdDTO
-import com.mzaragozaserrano.data.dto.AdDetailDTO
+import com.mzaragozaserrano.data.dto.DetailedAdDTO
 import com.mzaragozaserrano.data.dto.EnergyCertificationDTO
 import com.mzaragozaserrano.data.dto.EnergyTypeDTO
 import com.mzaragozaserrano.data.dto.ErrorDTO
@@ -16,24 +16,27 @@ import com.mzaragozaserrano.data.dto.PriceDTO
 import com.mzaragozaserrano.data.dto.PriceInfoDTO
 import com.mzaragozaserrano.data.dto.UbicationDTO
 import com.mzaragozaserrano.domain.bo.AdBO
-import com.mzaragozaserrano.domain.bo.AdDetailBO
+import com.mzaragozaserrano.domain.bo.AdTypeBO
+import com.mzaragozaserrano.domain.bo.DetailedAdBO
 import com.mzaragozaserrano.domain.bo.EnergyCertificationBO
 import com.mzaragozaserrano.domain.bo.EnergyTypeBO
 import com.mzaragozaserrano.domain.bo.ErrorBO
 import com.mzaragozaserrano.domain.bo.FeaturesBO
 import com.mzaragozaserrano.domain.bo.ImageBO
 import com.mzaragozaserrano.domain.bo.ImageDetailBO
-import com.mzaragozaserrano.domain.bo.LocationBO
 import com.mzaragozaserrano.domain.bo.MoreCharacteristicsBO
 import com.mzaragozaserrano.domain.bo.MultimediaBO
 import com.mzaragozaserrano.domain.bo.MultimediaDetailBO
 import com.mzaragozaserrano.domain.bo.ParkingSpaceBO
 import com.mzaragozaserrano.domain.bo.PriceBO
 import com.mzaragozaserrano.domain.bo.PriceInfoBO
+import com.mzaragozaserrano.domain.bo.UbicationBO
+import com.mzs.core.data.datasources.local.ResourcesDataSource
 
-fun List<AdDTO>.transform(): List<AdBO> = map { it.transform() }
+fun List<AdDTO>.transform(resourcesDataSource: ResourcesDataSource): List<AdBO> =
+    map { it.transform(resourcesDataSource = resourcesDataSource) }
 
-fun AdDTO.transform(): AdBO = AdBO(
+fun AdDTO.transform(resourcesDataSource: ResourcesDataSource): AdBO = AdBO(
     address = address,
     bathrooms = bathrooms,
     country = country,
@@ -52,14 +55,15 @@ fun AdDTO.transform(): AdBO = AdBO(
     price = price,
     priceInfo = priceInfo?.transform(),
     propertyCode = propertyCode,
-    propertyType = propertyType,
+    propertyType = propertyType.transform()
+        ?.let { textId -> resourcesDataSource.getStringFromResource(textId) },
     province = province,
     rooms = rooms,
     size = size,
     thumbnail = thumbnail
 )
 
-fun FeaturesDTO.transform(): FeaturesBO = FeaturesBO(
+private fun FeaturesDTO.transform(): FeaturesBO = FeaturesBO(
     hasAirConditioning = hasAirConditioning,
     hasBoxRoom = hasBoxRoom,
     hasGarden = hasGarden,
@@ -67,20 +71,27 @@ fun FeaturesDTO.transform(): FeaturesBO = FeaturesBO(
     hasTerrace = hasTerrace
 )
 
-fun MultimediaDTO.transform(): MultimediaBO = MultimediaBO(
+private fun MultimediaDTO.transform(): MultimediaBO = MultimediaBO(
     images = images?.map { it.transform() }
 )
 
-fun ImageDTO.transform(): ImageBO = ImageBO(url = url, tag = tag)
+private fun ImageDTO.transform(): ImageBO = ImageBO(url = url, tag = tag)
 
-fun ParkingSpaceDTO.transform(): ParkingSpaceBO = ParkingSpaceBO(
+private fun ParkingSpaceDTO.transform(): ParkingSpaceBO = ParkingSpaceBO(
     hasParkingSpace = hasParkingSpace,
     isParkingSpaceIncludedInPrice = isParkingSpaceIncludedInPrice
 )
 
-fun PriceInfoDTO.transform(): PriceInfoBO = PriceInfoBO(price = price?.transform())
+private fun PriceInfoDTO.transform(): PriceInfoBO = PriceInfoBO(price = price?.transform())
 
-fun AdDetailDTO.transform(): AdDetailBO = AdDetailBO(
+private fun String?.transform(): Int? {
+    return when (this) {
+        "flat" -> AdTypeBO.Flat.textId
+        else -> null
+    }
+}
+
+fun DetailedAdDTO.transform(): DetailedAdBO = DetailedAdBO(
     adid = adid,
     country = country,
     energyCertification = energyCertification?.transform(),
@@ -97,15 +108,15 @@ fun AdDetailDTO.transform(): AdDetailBO = AdDetailBO(
     ubication = ubication?.transform()
 )
 
-fun EnergyCertificationDTO.transform(): EnergyCertificationBO = EnergyCertificationBO(
+private fun EnergyCertificationDTO.transform(): EnergyCertificationBO = EnergyCertificationBO(
     emissions = emissions?.transform(),
     energyConsumption = energyConsumption?.transform(),
     title = title
 )
 
-fun EnergyTypeDTO.transform(): EnergyTypeBO = EnergyTypeBO(type = type)
+private fun EnergyTypeDTO.transform(): EnergyTypeBO = EnergyTypeBO(type = type)
 
-fun MoreCharacteristicsDTO.transform(): MoreCharacteristicsBO = MoreCharacteristicsBO(
+private fun MoreCharacteristicsDTO.transform(): MoreCharacteristicsBO = MoreCharacteristicsBO(
     agencyIsABank = agencyIsABank,
     bathNumber = bathNumber,
     boxroom = boxroom,
@@ -123,23 +134,23 @@ fun MoreCharacteristicsDTO.transform(): MoreCharacteristicsBO = MoreCharacterist
     status = status
 )
 
-fun MultimediaDetailDTO.transform(): MultimediaDetailBO = MultimediaDetailBO(
+private fun MultimediaDetailDTO.transform(): MultimediaDetailBO = MultimediaDetailBO(
     images = images?.map { it.transform() }
 )
 
-fun ImageDetailDTO.transform(): ImageDetailBO = ImageDetailBO(
+private fun ImageDetailDTO.transform(): ImageDetailBO = ImageDetailBO(
     url = url,
     tag = tag,
     localizedName = localizedName,
     multimediaId = multimediaId
 )
 
-fun UbicationDTO.transform(): LocationBO = LocationBO(
+private fun UbicationDTO.transform(): UbicationBO = UbicationBO(
     latitude = latitude,
     longitude = longitude
 )
 
-fun PriceDTO.transform(): PriceBO = PriceBO(
+private fun PriceDTO.transform(): PriceBO = PriceBO(
     amount = amount,
     currencySuffix = currencySuffix
 )

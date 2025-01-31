@@ -1,13 +1,12 @@
 package com.mzaragozaserrano.presentation.activities
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import com.mzaragozaserrano.presentation.base.BaseActivity
+import com.mzaragozaserrano.presentation.databinding.ActivityIdealistaBinding
 
-class IdealistaActivity : AppCompatActivity() {
+class IdealistaActivity : BaseActivity<ActivityIdealistaBinding>() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override val binding: ActivityIdealistaBinding by lazy {
+        ActivityIdealistaBinding.inflate(layoutInflater)
     }
 
 }

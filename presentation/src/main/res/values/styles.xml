@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Idealista" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="color_primary">@color/primary</item>
+        <item name="color_on_primary">@color/on_primary</item>
+        <item name="color_primary_container">@color/primary_container</item>
+        <item name="color_on_primary_container">@color/on_primary_container</item>
+        <item name="color_secondary">@color/secondary</item>
+        <item name="color_on_secondary">@color/on_secondary</item>
+        <item name="color_secondary_container">@color/secondary_container</item>
+        <item name="color_on_secondary_container">@color/on_secondary_container</item>
+        <item name="color_tertiary">@color/tertiary</item>
+        <item name="color_on_tertiary">@color/on_tertiary</item>
+        <item name="color_tertiary_container">@color/tertiary_container</item>
+        <item name="color_on_tertiary_container">@color/on_tertiary_container</item>
+        <item name="color_error">@color/error</item>
+        <item name="color_error_container">@color/error_container</item>
+        <item name="color_on_error">@color/on_error</item>
+        <item name="color_on_error_container">@color/on_error_container</item>
+        <item name="color_background">@color/background</item>
+        <item name="color_on_background">@color/on_background</item>
+        <item name="color_surface">@color/surface</item>
+        <item name="color_on_surface">@color/on_surface</item>
+        <item name="color_surface_variant">@color/surface_variant</item>
+        <item name="color_on_surface_variant">@color/on_surface_variant</item>
+        <item name="color_outline">@color/outline</item>
+        <item name="color_inverse_on_surface">@color/inverse_on_surface</item>
+        <item name="color_inverse_surface">@color/inverse_surface</item>
+        <item name="color_inverse_primary">@color/inverse_primary</item>
+        <item name="color_outline_variant">@color/outline_variant</item>
+
+        <item name="android:statusBarColor">@color/primary</item>
+
+    </style>
+
+</resources>

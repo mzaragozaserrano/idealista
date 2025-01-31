@@ -4,8 +4,8 @@ import com.mzaragozaserrano.domain.bo.AdBO
 import com.mzaragozaserrano.domain.bo.ErrorBO
 import com.mzaragozaserrano.domain.bo.Result
 import com.mzaragozaserrano.domain.repositories.remote.AdsRepository
-import com.mzaragozaserrano.domain.repositories.remote.NetworkRepository
-import com.mzaragozaserrano.domain.usecases.utils.FlowUseCaseNoParams
+import com.mzs.core.domain.repositories.NetworkRepository
+import com.mzs.core.domain.usecases.FlowUseCaseNoParams
 import kotlinx.coroutines.flow.Flow
 
 class GetAllAdsUseCaseImpl(

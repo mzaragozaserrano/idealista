@@ -1,7 +1,7 @@
 package com.mzaragozaserrano.data.datasources.remote
 
 import com.mzaragozaserrano.data.dto.AdDTO
-import com.mzaragozaserrano.data.dto.AdDetailDTO
+import com.mzaragozaserrano.data.dto.DetailedAdDTO
 import com.mzaragozaserrano.data.dto.ErrorDTO
 import com.mzaragozaserrano.data.dto.ResultDTO
 import com.mzaragozaserrano.data.utils.UrlConstants
@@ -25,18 +25,16 @@ class AdsDataSourceImpl : AdsDataSource {
         )
     }
 
-    override suspend fun getAdDetail(): ResultDTO<AdDetailDTO> {
+    override suspend fun getDetailedAd(): ResultDTO<DetailedAdDTO> {
         val moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-        val adapter: JsonAdapter<AdDetailDTO> = moshi.adapter(AdDetailDTO::class.java)
+        val adapter: JsonAdapter<DetailedAdDTO> = moshi.adapter(DetailedAdDTO::class.java)
         return doRequest(
             adapter = adapter,
-            url = UrlConstants.GetAdDetail.url
+            url = UrlConstants.GetDetailedAd.url
         )
     }
 
-    private fun <Type> doRequest(
-        url: String, adapter: JsonAdapter<Type>,
-    ): ResultDTO<Type> {
+    private fun <Type> doRequest(url: String, adapter: JsonAdapter<Type>): ResultDTO<Type> {
         val client = OkHttpClient()
         val request = Request.Builder().url(url).build()
         return try {

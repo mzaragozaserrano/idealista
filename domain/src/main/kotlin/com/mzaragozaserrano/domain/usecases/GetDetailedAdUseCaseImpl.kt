@@ -1,21 +1,21 @@
 package com.mzaragozaserrano.domain.usecases
 
-import com.mzaragozaserrano.domain.bo.AdBO
+import com.mzaragozaserrano.domain.bo.DetailedAdBO
 import com.mzaragozaserrano.domain.bo.ErrorBO
 import com.mzaragozaserrano.domain.bo.Result
 import com.mzaragozaserrano.domain.repositories.remote.AdsRepository
-import com.mzaragozaserrano.domain.repositories.remote.NetworkRepository
-import com.mzaragozaserrano.domain.usecases.utils.FlowUseCaseNoParams
+import com.mzs.core.domain.repositories.NetworkRepository
+import com.mzs.core.domain.usecases.FlowUseCaseNoParams
 import kotlinx.coroutines.flow.Flow
 
-class GeAdDetailUseCaseImpl(
+class GetDetailedAdUseCaseImpl(
     private val adsRepository: AdsRepository,
     networkRepository: NetworkRepository,
-) : FlowUseCaseNoParams<Result<AdBO>, ErrorBO>(
+) : FlowUseCaseNoParams<Result<DetailedAdBO>, ErrorBO>(
     networkRepository = networkRepository,
     networkError = ErrorBO.Connectivity
 ) {
 
-    override suspend fun run(): Flow<Result<AdBO>> = adsRepository.getAdDetail()
+    override suspend fun run(): Flow<Result<DetailedAdBO>> = adsRepository.getdetailedAd()
 
 }

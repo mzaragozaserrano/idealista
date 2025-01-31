@@ -1,6 +1,6 @@
 package com.mzaragozaserrano.domain.bo
 
-data class AdDetailBO(
+data class DetailedAdBO(
     val adid: Int?,
     val country: String?,
     val energyCertification: EnergyCertificationBO?,

@@ -1,6 +1,6 @@
 package com.mzaragozaserrano.data.dto
 
-data class AdDetailDTO(
+data class DetailedAdDTO(
     val adid: Int? = null,
     val country: String? = null,
     val energyCertification: EnergyCertificationDTO? = null,
