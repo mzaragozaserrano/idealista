@@ -15,6 +15,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Idealista"
 include(":app")
-include(":presentation")
+include(":core")
 include(":data")
 include(":domain")
+include(":presentation")
