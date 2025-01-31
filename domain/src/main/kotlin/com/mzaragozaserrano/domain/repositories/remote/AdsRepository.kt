@@ -2,7 +2,7 @@ package com.mzaragozaserrano.domain.repositories.remote
 
 import com.mzaragozaserrano.domain.bo.AdBO
 import com.mzaragozaserrano.domain.bo.DetailedAdBO
-import com.mzaragozaserrano.domain.bo.Result
+import com.mzs.core.domain.bo.Result
 import kotlinx.coroutines.flow.Flow
 
 interface AdsRepository {

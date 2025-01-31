@@ -16,7 +16,6 @@ import com.mzaragozaserrano.data.dto.PriceDTO
 import com.mzaragozaserrano.data.dto.PriceInfoDTO
 import com.mzaragozaserrano.data.dto.UbicationDTO
 import com.mzaragozaserrano.domain.bo.AdBO
-import com.mzaragozaserrano.domain.bo.AdTypeBO
 import com.mzaragozaserrano.domain.bo.DetailedAdBO
 import com.mzaragozaserrano.domain.bo.EnergyCertificationBO
 import com.mzaragozaserrano.domain.bo.EnergyTypeBO
@@ -30,6 +29,7 @@ import com.mzaragozaserrano.domain.bo.MultimediaDetailBO
 import com.mzaragozaserrano.domain.bo.ParkingSpaceBO
 import com.mzaragozaserrano.domain.bo.PriceBO
 import com.mzaragozaserrano.domain.bo.PriceInfoBO
+import com.mzaragozaserrano.domain.bo.StringResource
 import com.mzaragozaserrano.domain.bo.UbicationBO
 import com.mzs.core.data.datasources.local.ResourcesDataSource
 
@@ -42,7 +42,7 @@ fun AdDTO.transform(resourcesDataSource: ResourcesDataSource): AdBO = AdBO(
     country = country,
     description = description,
     district = district,
-    exterior = exterior,
+    exterior = exterior.transform(resourcesDataSource = resourcesDataSource),
     features = features?.transform(),
     floor = floor,
     latitude = latitude,
@@ -55,13 +55,20 @@ fun AdDTO.transform(resourcesDataSource: ResourcesDataSource): AdBO = AdBO(
     price = price,
     priceInfo = priceInfo?.transform(),
     propertyCode = propertyCode,
-    propertyType = propertyType.transform()
-        ?.let { textId -> resourcesDataSource.getStringFromResource(textId) },
+    propertyType = propertyType,
     province = province,
     rooms = rooms,
     size = size,
     thumbnail = thumbnail
 )
+
+private fun Boolean?.transform(resourcesDataSource: ResourcesDataSource): String? {
+    return when (this) {
+        true -> resourcesDataSource.getStringFromResource(StringResource.Exterior.textId)
+        false -> resourcesDataSource.getStringFromResource(StringResource.Interior.textId)
+        null -> null
+    }
+}
 
 private fun FeaturesDTO.transform(): FeaturesBO = FeaturesBO(
     hasAirConditioning = hasAirConditioning,
@@ -83,13 +90,6 @@ private fun ParkingSpaceDTO.transform(): ParkingSpaceBO = ParkingSpaceBO(
 )
 
 private fun PriceInfoDTO.transform(): PriceInfoBO = PriceInfoBO(price = price?.transform())
-
-private fun String?.transform(): Int? {
-    return when (this) {
-        "flat" -> AdTypeBO.Flat.textId
-        else -> null
-    }
-}
 
 fun DetailedAdDTO.transform(): DetailedAdBO = DetailedAdBO(
     adid = adid,

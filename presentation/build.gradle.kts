@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -60,6 +61,10 @@ dependencies {
 
     //----- KOIN ----------/
     implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+
+    //----- KOTLINX ----------/
+    implementation(libs.kotlinx.serialization.json)
 
     //----- MATERIAL ----------/
     implementation(libs.material3)

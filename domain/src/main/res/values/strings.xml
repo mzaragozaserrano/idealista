@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="type_flat">Piso en</string>
+    <string name="exterior">exterior</string>
+    <string name="type_flat">Piso en %1$s</string>
+    <string name="interior">interior</string>
 </resources>

@@ -1,7 +1,14 @@
 package com.mzaragozaserrano.presentation.vo
 
+import androidx.annotation.StringRes
+
 data class AdVO(
+    val extraInfo: List<Info>,
     val features: List<Feature>,
+    val hasNotInformation: Boolean,
+    val id: String,
+    var isFavorite: Boolean,
+    @StringRes val prefixTitle: Int?,
     val price: String,
     val subtitle: String,
     val thumbnail: String,

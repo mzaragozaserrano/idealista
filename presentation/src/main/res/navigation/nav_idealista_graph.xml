@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_idealista_graph"
-    app:startDestination="@id/HomeFragment">
+    app:startDestination="@id/MainFragment">
 
     <fragment
-        android:id="@+id/HomeFragment"
-        android:name="com.mzaragozaserrano.presentation.fragments.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home">
+        android:id="@+id/MainFragment"
+        android:name="com.mzaragozaserrano.presentation.fragments.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main">
         <!--  <action
               android:id="@+id/action_SplashFragment_to_HomeFragment"
               app:destination="@id/HomeFragment" />-->

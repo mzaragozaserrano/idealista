@@ -1,30 +1,28 @@
 package com.mzaragozaserrano.presentation.base
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.mzaragozaserrano.presentation.vo.ErrorVO
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 abstract class BaseViewModel<T> : ViewModel() {
 
-    private val _uiState = MutableLiveData<UiState<T>>()
-    val uiState: LiveData<UiState<T>> get() = _uiState
+    protected abstract fun createInitialState(): UiState<T>
 
-    protected fun setLoading() {
-        _uiState.postValue(UiState.Loading)
+    private val _uiState by lazy { MutableStateFlow(value = createInitialState()) }
+    val uiState = _uiState.asStateFlow()
+
+    protected fun onUpdateUiState(update: UiState<T>.() -> UiState<T>) {
+        _uiState.update { it.update() }
     }
 
-    protected fun setError() {
-        _uiState.postValue(UiState.Error)
-    }
+    fun getViewModelState(): UiState<T> = _uiState.value
 
-    protected fun setSuccess(data: T) {
-        _uiState.postValue(UiState.Success(data))
-    }
-
-    sealed class UiState<out T> {
-        data object Error : UiState<Nothing>()
-        data object Loading : UiState<Nothing>()
-        data class Success<T>(val data: T) : UiState<T>()
-    }
+    data class UiState<T>(
+        val error: ErrorVO? = null,
+        val loading: Boolean = false,
+        val success: T? = null,
+    )
 
 }

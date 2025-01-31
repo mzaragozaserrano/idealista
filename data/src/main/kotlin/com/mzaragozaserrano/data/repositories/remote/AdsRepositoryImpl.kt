@@ -6,7 +6,7 @@ import com.mzaragozaserrano.data.dto.ResultDTO
 import com.mzaragozaserrano.data.utils.transform
 import com.mzaragozaserrano.domain.bo.AdBO
 import com.mzaragozaserrano.domain.bo.DetailedAdBO
-import com.mzaragozaserrano.domain.bo.Result
+import com.mzs.core.domain.bo.Result
 import com.mzaragozaserrano.domain.repositories.remote.AdsRepository
 import com.mzs.core.data.datasources.local.ResourcesDataSource
 import kotlinx.coroutines.flow.Flow

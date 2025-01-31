@@ -6,7 +6,7 @@ data class AdBO(
     val country: String?,
     val description: String?,
     val district: String?,
-    val exterior: Boolean?,
+    val exterior: String?,
     val features: FeaturesBO?,
     val floor: String?,
     val latitude: Double?,
