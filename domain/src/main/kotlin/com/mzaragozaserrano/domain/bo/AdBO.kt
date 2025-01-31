@@ -1,3 +1,27 @@
 package com.mzaragozaserrano.domain.bo
 
-data class AdBO()
+data class AdBO(
+    val address: String?,
+    val bathrooms: Int?,
+    val country: String?,
+    val description: String?,
+    val district: String?,
+    val exterior: Boolean?,
+    val features: FeaturesBO?,
+    val floor: String?,
+    val latitude: Double?,
+    val longitude: Double?,
+    val multimedia: MultimediaBO?,
+    val municipality: String?,
+    val neighborhood: String?,
+    val operation: String?,
+    val parkingSpace: ParkingSpaceBO?,
+    val price: Double?,
+    val priceInfo: PriceInfoBO?,
+    val propertyCode: String?,
+    val propertyType: String?,
+    val province: String?,
+    val rooms: Int?,
+    val size: Double?,
+    val thumbnail: String?,
+)
