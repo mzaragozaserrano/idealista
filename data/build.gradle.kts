@@ -37,7 +37,13 @@ dependencies {
     //----- MODULES ----------/
     implementation(project(":domain"))
 
+    //-----  JSON PARSER ----------/
+    implementation(libs.moshi.kotlin)
+
     //----- KOIN ----------/
     implementation(libs.koin.android)
+
+    //----- OKHTTP ----------/
+    implementation(libs.okhttp.logging)
 
 }
