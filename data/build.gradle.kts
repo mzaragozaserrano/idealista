@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -49,5 +50,10 @@ dependencies {
 
     //----- OKHTTP ----------/
     implementation(libs.okhttp.logging)
+
+    //----- ROOM ----------/
+    implementation(libs.room)
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
 
 }
