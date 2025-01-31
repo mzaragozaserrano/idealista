@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="color_primary" format="reference" />
+    <attr name="color_on_primary" format="reference" />
+    <attr name="color_primary_container" format="reference" />
+    <attr name="color_on_primary_container" format="reference" />
+    <attr name="color_secondary" format="reference" />
+    <attr name="color_on_secondary" format="reference" />
+    <attr name="color_secondary_container" format="reference" />
+    <attr name="color_on_secondary_container" format="reference" />
+    <attr name="color_tertiary" format="reference" />
+    <attr name="color_on_tertiary" format="reference" />
+    <attr name="color_tertiary_container" format="reference" />
+    <attr name="color_on_tertiary_container" format="reference" />
+    <attr name="color_error" format="reference" />
+    <attr name="color_error_container" format="reference" />
+    <attr name="color_on_error" format="reference" />
+    <attr name="color_on_error_container" format="reference" />
+    <attr name="color_background" format="reference" />
+    <attr name="color_on_background" format="reference" />
+    <attr name="color_surface" format="reference" />
+    <attr name="color_on_surface" format="reference" />
+    <attr name="color_surface_variant" format="reference" />
+    <attr name="color_on_surface_variant" format="reference" />
+    <attr name="color_outline" format="reference" />
+    <attr name="color_inverse_on_surface" format="reference" />
+    <attr name="color_inverse_surface" format="reference" />
+    <attr name="color_inverse_primary" format="reference" />
+    <attr name="color_outline_variant" format="reference" />
+    <attr name="color_transparent" format="reference" />
+
+    <attr name="color_text_highlight" format="reference" />
+    <attr name="color_secondary_text_highlight" format="reference" />
+
+</resources>

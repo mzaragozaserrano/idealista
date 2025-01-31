@@ -1,0 +1,40 @@
+<resources>
+    <color name="primary">#D1E231</color>
+    <color name="on_primary">#333333</color>
+    <color name="primary_container">#F4F9D2</color>
+    <color name="on_primary_container">#5A5A00</color>
+    <color name="inverse_primary">#A3B321</color>
+
+    <color name="secondary">#606060</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="secondary_container">#A0A0A0</color>
+    <color name="on_secondary_container">#333333</color>
+
+    <color name="tertiary">#999999</color>
+    <color name="on_tertiary">#FFFFFF</color>
+    <color name="tertiary_container">#CCCCCC</color>
+    <color name="on_tertiary_container">#444444</color>
+
+    <color name="background">#FFFFFF</color>
+    <color name="on_background">#333333</color>
+    <color name="surface">#F1F1F1</color>
+    <color name="on_surface">#333333</color>
+    <color name="surface_variant">#E0E0E0</color>
+    <color name="on_surface_variant">#666666</color>
+    <color name="inverse_surface">#333333</color>
+    <color name="inverse_on_surface">#F9F9F9</color>
+
+    <color name="surface_bright">#F4F9D2</color>
+    <color name="surface_container">#EAEFCC</color>
+    <color name="surface_container_high">#DDE3B8</color>
+    <color name="surface_container_highest">#D1D8A5</color>
+
+    <color name="error">#D32F2F</color>
+    <color name="on_error">#FFFFFF</color>
+    <color name="error_container">#FFCDD2</color>
+    <color name="on_error_container">#B71C1C</color>
+
+    <color name="outline">#B0B0B0</color>
+    <color name="outline_variant">#E0E0E0</color>
+    <color name="scrim">#80000000</color>
+</resources>
