@@ -2,6 +2,7 @@ package com.mzaragozaserrano.presentation.composables.items
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.mzaragozaserrano.presentation.R
@@ -9,12 +10,14 @@ import com.mzs.core.presentation.components.compose.alerts.CardAlert
 
 @Composable
 fun ErrorDialog(
+    modifier: Modifier = Modifier,
     buttonText: String,
     durationMillisBlockingButton: Int? = 3000,
     messageText: String,
     onButtonClicked: () -> Unit,
 ) {
     CardAlert(
+        modifier = modifier,
         alertBackgroundColor = MaterialTheme.colorScheme.errorContainer,
         buttonBackgroundColor = MaterialTheme.colorScheme.error,
         buttonStyle = MaterialTheme.typography.labelMedium,

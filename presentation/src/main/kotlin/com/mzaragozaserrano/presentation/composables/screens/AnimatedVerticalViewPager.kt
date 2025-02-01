@@ -5,15 +5,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.mzaragozaserrano.presentation.composables.items.AddItem
+import com.mzaragozaserrano.presentation.composables.items.HomeAdCard
 import com.mzaragozaserrano.presentation.vo.AdVO
 
 @Composable
-fun ListScreen(
+fun AnimatedVerticalViewPager(
     modifier: Modifier,
-    cornerRadius: Dp = 20.dp,
     ads: List<AdVO>,
     onCardClicked: () -> Unit,
     onFavoriteClicked: (String, Boolean) -> Unit,
@@ -32,10 +30,9 @@ fun ListScreen(
         state = state,
         pageSpacing = 16.dp,
         pageContent = { page ->
-            AddItem(
+            HomeAdCard(
                 page = page,
                 state = state,
-                cornerRadius = cornerRadius,
                 onCardClicked = onCardClicked,
                 ads = ads,
                 modifier = modifier,

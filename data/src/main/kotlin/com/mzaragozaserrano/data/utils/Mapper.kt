@@ -36,6 +36,7 @@ import com.mzaragozaserrano.domain.bo.UbicationBO
 import com.mzs.core.data.datasources.local.ResourcesDataSource
 import com.mzs.core.domain.utils.generic.DateUtils
 import com.mzs.core.domain.utils.generic.ddMMyyyy_HHmm
+import java.util.UUID
 
 fun List<AdDTO>.transform(resourcesDataSource: ResourcesDataSource): List<AdBO> =
     map { it.transform(resourcesDataSource = resourcesDataSource) }
@@ -169,14 +170,25 @@ fun ErrorDTO.transform(): ErrorBO = when (this) {
 }
 
 fun FavoriteAdDTO.transform(): FavoriteAdBO =
-    FavoriteAdBO(id = id.toString(), date = date, price = price, title = title)
+    FavoriteAdBO(
+        id = id.toString(),
+        date = date,
+        operation = operation,
+        price = price,
+        subtitle = subtitle,
+        thumbnail = thumbnail,
+        title = title
+    )
 
 fun FavoriteAdBO.transform(dateUtils: DateUtils? = null): FavoriteAdDTO {
     val dateAux = dateUtils?.getCurrentDate(formatOut = ddMMyyyy_HHmm) ?: date.orEmpty()
     return FavoriteAdDTO(
-        id = id.toInt(),
+        id = id?.toInt() ?: UUID.randomUUID().toString().toInt(),
         date = dateAux,
+        operation = operation,
         price = price,
+        subtitle = subtitle,
+        thumbnail = thumbnail,
         title = title
     )
 }

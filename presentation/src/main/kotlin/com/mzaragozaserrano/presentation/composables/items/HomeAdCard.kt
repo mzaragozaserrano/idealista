@@ -2,20 +2,24 @@ package com.mzaragozaserrano.presentation.composables.items
 
 import android.graphics.RenderEffect
 import android.graphics.Shader
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOutCubic
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,19 +44,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import coil.compose.AsyncImage
-import coil.request.CachePolicy
-import coil.request.ImageRequest
 import com.mzaragozaserrano.presentation.R
 import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.Info
 import com.mzs.core.presentation.components.compose.images.ResourceImage
+import com.mzs.core.presentation.components.compose.images.UrlImage
 import com.mzs.core.presentation.components.compose.labels.WavyLabel
 import com.mzs.core.presentation.components.compose.utils.Adapter
 import com.mzs.core.presentation.utils.generic.ItemOrientation
@@ -60,10 +60,9 @@ import com.mzs.core.presentation.utils.generic.emptyText
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
-fun AddItem(
+fun HomeAdCard(
     page: Int,
     state: PagerState,
-    cornerRadius: Dp,
     onCardClicked: () -> Unit,
     ads: List<AdVO>,
     modifier: Modifier,
@@ -78,15 +77,28 @@ fun AddItem(
             minimumValue = 0f
         )
 
-    val animateScale by animateFloatAsState(
+    val scaleAnimation by animateFloatAsState(
         animationSpec = tween(durationMillis = 400, easing = EaseOutCubic),
         finishedListener = {
             isPressed = false
         },
         targetValue = if (isPressed && isFavorite) {
-            (1f - (startOffset * 0.1f)) - 0.1f
+            1.1f
         } else {
-            1f - (startOffset * 0.1f)
+            1f
+        },
+        label = emptyText
+    )
+
+    val sizeAnimation by animateDpAsState(
+        animationSpec = tween(durationMillis = 400, easing = EaseOutCubic),
+        finishedListener = {
+            isPressed = false
+        },
+        targetValue = if (isPressed && isFavorite) {
+            40.dp
+        } else {
+            32.dp
         },
         label = emptyText
     )
@@ -119,39 +131,28 @@ fun AddItem(
                 renderEffect = RenderEffect
                     .createBlurEffect(blur, blur, Shader.TileMode.DECAL)
                     .asComposeRenderEffect()
-                val staticScale = 1f - (startOffset * 0.1f)
-                scaleX =
-                    if (state.currentPage == page && isPressed) animateScale else staticScale
-                scaleY =
-                    if (state.currentPage == page && isPressed) animateScale else staticScale
+                val scale = 1f - (startOffset * 0.1f)
+                scaleX = scale
+                scaleY = scale
             }
-            .clip(shape = RoundedCornerShape(size = cornerRadius))
+            .clip(shape = RoundedCornerShape(size = 20.dp))
             .offset(x = shakeAnimation.value.dp, y = 0.dp)
             .clickable { onCardClicked() },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         content = {
-            Column {
-                AsyncImage(
-                    modifier = Modifier
-                        .weight(weight = 1f)
-                        .clip(
-                            RoundedCornerShape(
-                                topStart = cornerRadius,
-                                topEnd = cornerRadius
-                            )
-                        ),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    model = ImageRequest.Builder(context = LocalContext.current)
-                        .data(data = ads[page].thumbnail)
-                        .memoryCachePolicy(policy = CachePolicy.ENABLED)
-                        .build()
-                )
-                Column(
-                    modifier = Modifier.padding(all = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(space = 4.dp),
-                    content = {
-                        if (ads[page].features.isNotEmpty()) {
+            UrlImage(
+                modifier = Modifier.weight(weight = 1f),
+                animationId = R.raw.image_loading,
+                contentScale = ContentScale.Crop,
+                url = ads[page].thumbnail
+            )
+            LazyColumn(
+                modifier = Modifier.padding(all = 16.dp),
+                userScrollEnabled = false,
+                verticalArrangement = Arrangement.spacedBy(space = 4.dp),
+                content = {
+                    if (ads[page].features.isNotEmpty()) {
+                        item {
                             Adapter(
                                 modifier = Modifier.padding(vertical = 2.dp),
                                 arrangement = Arrangement.spacedBy(space = 8.dp),
@@ -169,8 +170,10 @@ fun AddItem(
                                 key = { _, item -> item.id }
                             )
                         }
-                        ads[page].prefixTitle?.let { prefixId ->
-                            if (ads[page].title.isNotEmpty()) {
+                    }
+                    ads[page].prefixTitle?.let { prefixId ->
+                        if (ads[page].title.isNotEmpty()) {
+                            item {
                                 Text(
                                     color = MaterialTheme.colorScheme.onSurface,
                                     maxLines = 1,
@@ -180,7 +183,9 @@ fun AddItem(
                                 )
                             }
                         }
-                        if (ads[page].title.isNotEmpty()) {
+                    }
+                    if (ads[page].title.isNotEmpty()) {
+                        item {
                             Text(
                                 color = MaterialTheme.colorScheme.onSurface,
                                 maxLines = 1,
@@ -189,7 +194,9 @@ fun AddItem(
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
-                        if (ads[page].price.isNotEmpty()) {
+                    }
+                    if (ads[page].price.isNotEmpty()) {
+                        item {
                             Text(
                                 modifier = Modifier.padding(vertical = 2.dp),
                                 color = MaterialTheme.colorScheme.onSurface,
@@ -199,6 +206,8 @@ fun AddItem(
                                 style = MaterialTheme.typography.headlineMedium
                             )
                         }
+                    }
+                    item {
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(
                                 space = 16.dp,
@@ -244,26 +253,42 @@ fun AddItem(
                                 )
                             }
                             if (ads[page].id.isNotEmpty()) {
-                                Icon(
-                                    modifier = Modifier
-                                        .size(size = 32.dp)
-                                        .clip(shape = CircleShape)
-                                        .clickable {
-                                            onFavoriteClicked(ads[page].id, isFavorite)
-                                            isFavorite = isFavorite.not()
-                                            isPressed = isPressed.not()
-                                        },
-                                    imageVector = if (isFavorite) {
-                                        Icons.Rounded.Favorite
-                                    } else {
-                                        Icons.Rounded.FavoriteBorder
+                                Crossfade(
+                                    animationSpec = spring(
+                                        dampingRatio = Spring.DampingRatioNoBouncy,
+                                        stiffness = Spring.StiffnessLow
+                                    ),
+                                    targetState = isFavorite,
+                                    content = { favoriteState ->
+                                        Icon(
+                                            modifier = Modifier
+                                                .size(size = if (isPressed) sizeAnimation else 32.dp)
+                                                .clip(shape = CircleShape)
+                                                .clickable {
+                                                    onFavoriteClicked(ads[page].id, isFavorite)
+                                                    isFavorite = isFavorite.not()
+                                                    isPressed = isPressed.not()
+                                                }
+                                                .graphicsLayer(
+                                                    scaleX = if (isPressed) scaleAnimation else 1f,
+                                                    scaleY = if (isPressed) scaleAnimation else 1f
+                                                ),
+                                            imageVector = if (favoriteState) {
+                                                Icons.Rounded.Favorite
+                                            } else {
+                                                Icons.Rounded.FavoriteBorder
+                                            },
+                                            tint = MaterialTheme.colorScheme.inversePrimary,
+                                            contentDescription = emptyText
+                                        )
                                     },
-                                    tint = MaterialTheme.colorScheme.inversePrimary,
-                                    contentDescription = emptyText
+                                    label = emptyText
                                 )
                             }
                         }
-                        if (ads[page].hasNotInformation) {
+                    }
+                    if (ads[page].hasNotInformation) {
+                        item {
                             Text(
                                 modifier = Modifier.padding(vertical = 2.dp),
                                 color = MaterialTheme.colorScheme.onSurface,
@@ -274,8 +299,8 @@ fun AddItem(
                             )
                         }
                     }
-                )
-            }
+                }
+            )
         }
     )
 }

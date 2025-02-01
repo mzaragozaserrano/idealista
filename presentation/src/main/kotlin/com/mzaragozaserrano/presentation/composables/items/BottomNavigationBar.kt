@@ -31,7 +31,7 @@ fun BottomNavigationBar(items: List<BottomItem>, onItemSelected: (BottomItem) ->
 
             var isPressed by remember { mutableStateOf(value = false) }
 
-            val animateScale by animateFloatAsState(
+            val scaleAnimation by animateFloatAsState(
                 animationSpec = tween(durationMillis = 200, easing = EaseOutCubic),
                 finishedListener = {
                     isPressed = false
@@ -46,8 +46,8 @@ fun BottomNavigationBar(items: List<BottomItem>, onItemSelected: (BottomItem) ->
 
             NavigationBarItem(
                 modifier = Modifier.graphicsLayer(
-                    scaleX = animateScale,
-                    scaleY = animateScale
+                    scaleX = scaleAnimation,
+                    scaleY = scaleAnimation
                 ),
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.inversePrimary,

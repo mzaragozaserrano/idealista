@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    //----- APP ----------/
-    <string name="app_name">Idealista</string>
     //----- BOTTOM BAR ----------/
     <string name="bottom_item_favorite">Favoritos</string>
     <string name="bottom_item_home">Home</string>
@@ -16,6 +14,8 @@
     <string name="error_deserializing_json">Error deserializando el fichero JSON</string>
     <string name="error_loading_data">Error cargando la información</string>
     <string name="error_loading_url">Error cargando la URL</string>
+    //----- FAVORITES ----------/
+    <string name="favorite_ad_saved">Guardado a las %1$sh.</string>
     //----- FILTER ----------/
     <string name="filter_all">Todos</string>
     //----- LABELS ----------/
@@ -23,6 +23,9 @@
     <string name="rooms">%1$s hab.</string>
     <string name="square_meters">%1$s m\u00B2</string>
     <string name="not_info_available">No hay información disponible</string>
+    //----- TOOLBAR ----------/
+    <string name="favorites_home">Idealista</string>
+    <string name="favorites_toolbar">Tus favoritos</string>
     //----- TYPE ----------/
     <string name="type_rent">Alquiler</string>
     <string name="type_sale">Venta</string>

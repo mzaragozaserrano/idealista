@@ -7,6 +7,9 @@ import androidx.room.PrimaryKey
 data class FavoriteAdDTO(
     @PrimaryKey val id: Int = 0,
     val date: String,
-    val price: String,
-    val title: String
+    val operation: String?,
+    val price: String?,
+    val subtitle: String?,
+    val thumbnail: String?,
+    val title: String?,
 )

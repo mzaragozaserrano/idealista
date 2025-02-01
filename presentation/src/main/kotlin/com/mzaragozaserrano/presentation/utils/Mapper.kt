@@ -9,10 +9,11 @@ import com.mzaragozaserrano.domain.bo.StringResource
 import com.mzaragozaserrano.presentation.vo.AdType
 import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.ErrorVO
+import com.mzaragozaserrano.presentation.vo.FavoriteAdVO
 import com.mzaragozaserrano.presentation.vo.Feature
-import com.mzaragozaserrano.presentation.vo.Filter
 import com.mzaragozaserrano.presentation.vo.Info
-import com.mzaragozaserrano.presentation.vo.Type
+import com.mzs.core.domain.utils.generic.DateUtils
+import com.mzs.core.domain.utils.generic.ddMMyyyy
 import com.mzs.core.presentation.utils.extensions.capitalize
 import com.mzs.core.presentation.utils.generic.emptyText
 import java.text.DecimalFormat
@@ -161,22 +162,39 @@ private fun createSubtitle(
     return subtitle.toString()
 }
 
-private fun createTitle(address: String?, propertyType: String?): String {
-    val title = StringBuilder()
-    when {
-        address != null && propertyType != null -> {
-            title.append("$propertyType $address")
-        }
+fun AdVO.transform(): FavoriteAdBO =
+    FavoriteAdBO(
+        id = id,
+        operation = type.transform(),
+        price = price,
+        subtitle = subtitle,
+        thumbnail = thumbnail,
+        title = title
+    )
 
-        address != null -> {
-            title.append(address)
-        }
-
-        else -> {
-            title.append(emptyText)
-        }
+private fun AdType?.transform(): String? {
+    return when (this) {
+        AdType.Sale -> "sale"
+        AdType.Rent -> "rent"
+        else -> null
     }
-    return title.toString()
 }
 
-fun AdVO.transform(): FavoriteAdBO = FavoriteAdBO(id = id, price = price, title = title)
+fun FavoriteAdBO.transform(): FavoriteAdVO = FavoriteAdVO(
+    id = id.orEmpty(),
+    date = date.orEmpty(),
+    price = price.orEmpty(),
+    subtitle = subtitle.orEmpty(),
+    title = title.orEmpty(),
+    thumbnail = thumbnail.orEmpty(),
+    type = operation.transformToAdType()
+)
+
+fun List<FavoriteAdVO>.transform(dateUtils: DateUtils) = groupBy { ad ->
+    dateUtils.formatDateToFriendlyString(
+        dateUtils.convertStringToLocalDate(
+            dateString = ad.date?.split(" ")?.get(1).orEmpty(),
+            format = ddMMyyyy
+        )
+    )
+}

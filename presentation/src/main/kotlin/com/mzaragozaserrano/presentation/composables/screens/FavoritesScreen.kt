@@ -11,17 +11,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mzaragozaserrano.presentation.R
 import com.mzaragozaserrano.presentation.composables.items.ErrorDialog
+import com.mzaragozaserrano.presentation.composables.items.FavoritesAdsList
 import com.mzaragozaserrano.presentation.composables.items.ProgressDialog
-import com.mzaragozaserrano.presentation.viewmodels.HomeViewModel
+import com.mzaragozaserrano.presentation.viewmodels.FavoritesViewModel
 import com.mzaragozaserrano.presentation.vo.Filter
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HomeScreen(
+fun FavoritesScreen(
     modifier: Modifier = Modifier,
     optionSelected: Filter?,
-    viewModel: HomeViewModel = koinViewModel(),
-    onPageChanged: (Int) -> Unit,
+    viewModel: FavoritesViewModel = koinViewModel(),
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -38,11 +38,10 @@ fun HomeScreen(
 
     uiState.error?.let { error ->
         ErrorDialog(
-            modifier = Modifier.padding(horizontal = 16.dp),
             buttonText = stringResource(id = R.string.retry_button),
             messageText = stringResource(id = error.messageId),
             onButtonClicked = {
-                viewModel.onExecuteGetAllAds(optionSelected = optionSelected)
+                viewModel.onExecuteGetAllFavorites(optionSelected = optionSelected)
             }
         )
     }
@@ -50,14 +49,11 @@ fun HomeScreen(
         ProgressDialog()
     }
     uiState.success?.let { success ->
-        AnimatedVerticalViewPager(
-            modifier = modifier.fillMaxSize(),
-            ads = success.currentAds,
-            onCardClicked = { },
-            onFavoriteClicked = { id, isFavorite ->
-                viewModel.onFavoriteClicked(id = id, isFavorite = isFavorite)
-            },
-            onPageChanged = onPageChanged
+        FavoritesAdsList(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(vertical = 16.dp),
+            ads = success.currentAds
         )
     }
 

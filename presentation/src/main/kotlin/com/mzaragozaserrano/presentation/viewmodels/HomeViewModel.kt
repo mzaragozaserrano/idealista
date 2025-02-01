@@ -22,15 +22,17 @@ class HomeViewModel(
 
     override fun createInitialState(): UiState<HomeVO> = UiState()
 
-    fun onCreate() {
-        onExecuteGetAllAds()
+    fun onCreate(optionSelected: Filter?) {
+        onExecuteGetAllAds(optionSelected = optionSelected)
     }
 
-    fun onExecuteGetAllAds() {
+    fun onExecuteGetAllAds(optionSelected: Filter?) {
         viewModelScope.launch {
             getAllAds
                 .invoke()
-                .collect(collector = ::handleGetAllAdsResponse)
+                .collect { result ->
+                    handleGetAllAdsResponse(optionSelected = optionSelected, result = result)
+                }
         }
     }
 
@@ -86,7 +88,7 @@ class HomeViewModel(
         }
     }
 
-    private fun handleGetAllAdsResponse(result: Result<List<AdBO>>) {
+    private fun handleGetAllAdsResponse(optionSelected: Filter?, result: Result<List<AdBO>>) {
         when (result) {
             is Result.Loading -> {
                 onUpdateUiState { copy(error = null, loading = true) }
@@ -103,11 +105,22 @@ class HomeViewModel(
 
             is Result.Response.Success -> {
                 val ads = result.data.transform()
+                val filteredList = if (optionSelected is Type) {
+                    ads.filter { ad ->
+                        ad.type == (optionSelected as? Type)?.type
+                    }
+                } else {
+                    ads
+                }
                 onUpdateUiState {
                     copy(
                         error = null,
                         loading = false,
-                        success = HomeVO(allAds = ads, currentAds = ads)
+                        success = HomeVO(
+                            allAds = ads,
+                            currentAds = filteredList,
+                            optionSelected = optionSelected
+                        )
                     )
                 }
             }
@@ -115,8 +128,8 @@ class HomeViewModel(
     }
 
     data class HomeVO(
-        val currentAds: List<AdVO>,
         val allAds: List<AdVO>,
+        val currentAds: List<AdVO>,
         val optionSelected: Filter? = null,
     )
 
