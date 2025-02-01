@@ -31,7 +31,7 @@ fun FavoritesAdsList(modifier: Modifier = Modifier, ads: Map<String, List<Favori
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         text = date,
-                        style = MaterialTheme.typography.headlineSmall
+                        style = MaterialTheme.typography.headlineMedium
                     )
                 }
                 item {

@@ -4,7 +4,10 @@ import android.graphics.RenderEffect
 import android.graphics.Shader
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.EaseOutCubic
+import androidx.compose.animation.core.EaseOutExpo
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
@@ -78,7 +81,7 @@ fun HomeAdCard(
         )
 
     val scaleAnimation by animateFloatAsState(
-        animationSpec = tween(durationMillis = 400, easing = EaseOutCubic),
+        animationSpec = tween(durationMillis = 250, easing = EaseInOut),
         finishedListener = {
             isPressed = false
         },
@@ -91,7 +94,7 @@ fun HomeAdCard(
     )
 
     val sizeAnimation by animateDpAsState(
-        animationSpec = tween(durationMillis = 400, easing = EaseOutCubic),
+        animationSpec = tween(durationMillis = 250, easing = EaseInOut),
         finishedListener = {
             isPressed = false
         },
