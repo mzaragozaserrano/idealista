@@ -32,6 +32,7 @@
         <item name="color_outline_variant">@color/outline_variant</item>
 
         <item name="android:statusBarColor">@color/primary</item>
+        <item name="android:windowBackground">@color/primary</item>
 
     </style>
 
