@@ -16,6 +16,6 @@ class GetDetailedAdUseCaseImpl(
     networkError = ErrorBO.Connectivity
 ) {
 
-    override suspend fun run(): Flow<Result<DetailedAdBO>> = adsRepository.getdetailedAd()
+    override suspend fun run(): Flow<Result<DetailedAdBO>> = adsRepository.getDetailedAd()
 
 }

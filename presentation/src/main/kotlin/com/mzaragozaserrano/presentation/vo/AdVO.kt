@@ -13,4 +13,5 @@ data class AdVO(
     val subtitle: String,
     val thumbnail: String,
     val title: String,
+    val type: AdType?
 )

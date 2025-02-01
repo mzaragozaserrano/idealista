@@ -7,5 +7,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface AdsRepository {
     suspend fun getAllAds(): Flow<Result<List<AdBO>>>
-    suspend fun getdetailedAd(): Flow<Result<DetailedAdBO>>
+    suspend fun getDetailedAd(): Flow<Result<DetailedAdBO>>
 }

@@ -5,11 +5,16 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.mzaragozaserrano.presentation.composables.screens.HomeScreen
+import com.mzaragozaserrano.presentation.vo.Filter
 import com.mzs.core.presentation.navigation.screenNavigation
 import kotlinx.serialization.Serializable
 
 @Composable
-fun Navigation(modifier: Modifier = Modifier) {
+fun Navigation(
+    modifier: Modifier = Modifier,
+    optionSelected: Filter?,
+    onPagedChanged: (Int) -> Unit,
+) {
 
     val navController = rememberNavController()
 
@@ -18,7 +23,7 @@ fun Navigation(modifier: Modifier = Modifier) {
 
         }
         screenNavigation<Home> {
-            HomeScreen()
+            HomeScreen(optionSelected = optionSelected, onPageChanged = onPagedChanged)
         }
     }
 

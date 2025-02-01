@@ -1,5 +1,6 @@
 package com.mzaragozaserrano.data.repositories.remote
 
+import com.mzaragozaserrano.data.datasources.local.database.FavoritesDataSource
 import com.mzaragozaserrano.data.datasources.remote.AdsDataSource
 import com.mzaragozaserrano.data.dto.ErrorDTO
 import com.mzaragozaserrano.data.dto.ResultDTO
@@ -32,7 +33,7 @@ class AdsRepositoryImpl(
         )
     }
 
-    override suspend fun getdetailedAd(): Flow<Result<DetailedAdBO>> = flow {
+    override suspend fun getDetailedAd(): Flow<Result<DetailedAdBO>> = flow {
         emit(Result.Loading)
         emit(
             when (val result = adsDataSource.getDetailedAd()) {

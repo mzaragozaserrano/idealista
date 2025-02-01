@@ -2,13 +2,17 @@ package com.mzaragozaserrano.presentation.utils
 
 import com.mzaragozaserrano.domain.bo.AdBO
 import com.mzaragozaserrano.domain.bo.ErrorBO
+import com.mzaragozaserrano.domain.bo.FavoriteAdBO
 import com.mzaragozaserrano.domain.bo.FeaturesBO
 import com.mzaragozaserrano.domain.bo.PriceBO
 import com.mzaragozaserrano.domain.bo.StringResource
+import com.mzaragozaserrano.presentation.vo.AdType
 import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.ErrorVO
 import com.mzaragozaserrano.presentation.vo.Feature
+import com.mzaragozaserrano.presentation.vo.Filter
 import com.mzaragozaserrano.presentation.vo.Info
+import com.mzaragozaserrano.presentation.vo.Type
 import com.mzs.core.presentation.utils.extensions.capitalize
 import com.mzs.core.presentation.utils.generic.emptyText
 import java.text.DecimalFormat
@@ -28,7 +32,7 @@ fun List<AdBO>.transform(): List<AdVO> = map { it.transform() }
 fun AdBO.transform(): AdVO {
     val extraInfo =
         createExtraInfoList(exterior = exterior, floor = floor, rooms = rooms, size = size)
-    val features = features.transform()
+    val features = features.transform(hasParking = parkingSpace?.hasParkingSpace ?: false)
     val price = priceInfo?.price.transform()
     val subtitle = createSubtitle(
         province = province,
@@ -40,13 +44,14 @@ fun AdBO.transform(): AdVO {
         extraInfo = extraInfo,
         hasNotInformation = extraInfo.isEmpty() && features.isEmpty() && price.isEmpty() && subtitle.isEmpty() && title.isEmpty(),
         id = propertyCode.orEmpty(),
-        isFavorite = false,
+        isFavorite = isFavorite,
         features = features,
-        prefixTitle = propertyType.transform(),
+        prefixTitle = propertyType.transformToStringResource(),
         price = price,
         subtitle = subtitle,
         thumbnail = thumbnail.orEmpty(),
-        title = title
+        title = title,
+        type = operation.transformToAdType()
     )
 }
 
@@ -61,6 +66,7 @@ private fun createExtraInfoList(
         floor != null && exterior != null -> {
             list.add(element = Info.Floor(value = floor, secondValue = exterior))
         }
+
         floor != null -> {
             list.add(element = Info.Floor(value = floor))
         }
@@ -71,21 +77,30 @@ private fun createExtraInfoList(
 }
 
 
-fun FeaturesBO?.transform(): List<Feature> {
+fun FeaturesBO?.transform(hasParking: Boolean): List<Feature> {
     val features = mutableListOf<Feature>()
     if (this != null) {
         if (hasAirConditioning) features.add(element = Feature.AirConditioning)
         if (hasBoxRoom) features.add(element = Feature.BoxRoom)
         if (hasGarden) features.add(element = Feature.Garden)
+        if (hasParking) features.add(element = Feature.Parking)
         if (hasSwimmingPool) features.add(element = Feature.SwimmingPool)
         if (hasTerrace) features.add(element = Feature.Terrace)
     }
     return features
 }
 
-private fun String?.transform(): Int? {
+private fun String?.transformToStringResource(): Int? {
     return when (this) {
         "flat" -> StringResource.Flat.textId
+        else -> null
+    }
+}
+
+private fun String?.transformToAdType(): AdType? {
+    return when (this) {
+        "sale" -> AdType.Sale
+        "rent" -> AdType.Rent
         else -> null
     }
 }
@@ -164,3 +179,4 @@ private fun createTitle(address: String?, propertyType: String?): String {
     return title.toString()
 }
 
+fun AdVO.transform(): FavoriteAdBO = FavoriteAdBO(id = id, price = price, title = title)

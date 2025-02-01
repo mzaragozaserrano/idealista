@@ -9,6 +9,7 @@ data class AdBO(
     val exterior: String?,
     val features: FeaturesBO?,
     val floor: String?,
+    var isFavorite: Boolean = false,
     val latitude: Double?,
     val longitude: Double?,
     val multimedia: MultimediaBO?,
