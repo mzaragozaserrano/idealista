@@ -5,6 +5,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -81,6 +82,7 @@ fun MainScreen(onCardClicked: () -> Unit) {
                         },
                         content = { isHome ->
                             Text(
+                                modifier = Modifier.fillMaxWidth(),
                                 color = MaterialTheme.colorScheme.onPrimary,
                                 text = stringResource(id = if (isHome) R.string.favorites_home else R.string.favorites_toolbar),
                                 style = MaterialTheme.typography.headlineLarge

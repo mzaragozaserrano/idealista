@@ -1,6 +1,7 @@
 package com.mzaragozaserrano.presentation.utils
 
 import com.mzaragozaserrano.domain.bo.AdBO
+import com.mzaragozaserrano.domain.bo.DetailedAdBO
 import com.mzaragozaserrano.domain.bo.ErrorBO
 import com.mzaragozaserrano.domain.bo.FavoriteAdBO
 import com.mzaragozaserrano.domain.bo.FeaturesBO
@@ -8,6 +9,7 @@ import com.mzaragozaserrano.domain.bo.PriceBO
 import com.mzaragozaserrano.domain.bo.StringResource
 import com.mzaragozaserrano.presentation.vo.AdType
 import com.mzaragozaserrano.presentation.vo.AdVO
+import com.mzaragozaserrano.presentation.vo.DetailedAdVO
 import com.mzaragozaserrano.presentation.vo.ErrorVO
 import com.mzaragozaserrano.presentation.vo.FavoriteAdVO
 import com.mzaragozaserrano.presentation.vo.Feature
@@ -193,8 +195,16 @@ fun FavoriteAdBO.transform(): FavoriteAdVO = FavoriteAdVO(
 fun List<FavoriteAdVO>.transform(dateUtils: DateUtils) = groupBy { ad ->
     dateUtils.formatDateToFriendlyString(
         dateUtils.convertStringToLocalDate(
-            dateString = ad.date?.split(" ")?.get(1).orEmpty(),
+            dateString = ad.date?.split(" ")?.get(0).orEmpty(),
             format = ddMMyyyy
         )
     )
-}
+}.toList().reversed().toMap()
+
+fun DetailedAdBO.transform(): DetailedAdVO = DetailedAdVO(
+    energyCertification,
+    moreCharacteristics,
+    multimedia,
+    propertyComment,
+    ubication
+)

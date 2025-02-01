@@ -1,6 +1,7 @@
 package com.mzaragozaserrano.presentation.vo
 
 import androidx.annotation.StringRes
+import java.io.Serializable
 
 data class AdVO(
     val extraInfo: List<Info>,
@@ -13,5 +14,5 @@ data class AdVO(
     val subtitle: String,
     val thumbnail: String,
     val title: String,
-    val type: AdType?
-)
+    val type: AdType?,
+) : Serializable

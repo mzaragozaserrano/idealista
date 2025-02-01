@@ -40,7 +40,7 @@ fun FavoritesAdsList(
                 }
                 item {
                     Adapter(
-                        modifier = Modifier.padding(top = 4.dp),
+                        modifier = Modifier.padding(bottom = 4.dp),
                         arrangement = Arrangement.spacedBy(space = 16.dp),
                         contentPadding = 16.dp,
                         itemOrientation = ItemOrientation.Horizontal,

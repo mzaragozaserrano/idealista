@@ -36,6 +36,45 @@ class HomeViewModel(
         }
     }
 
+    private fun handleGetAllAdsResponse(optionSelected: Filter?, result: Result<List<AdBO>>) {
+        when (result) {
+            is Result.Loading -> {
+                onUpdateUiState { copy(error = null, loading = true) }
+            }
+
+            is Result.Response.Error<*> -> {
+                onUpdateUiState {
+                    copy(
+                        error = (result.code as ErrorBO).transform(),
+                        loading = false
+                    )
+                }
+            }
+
+            is Result.Response.Success -> {
+                val ads = result.data.transform()
+                val filteredList = if (optionSelected is Type) {
+                    ads.filter { ad ->
+                        ad.type == (optionSelected as? Type)?.type
+                    }
+                } else {
+                    ads
+                }
+                onUpdateUiState {
+                    copy(
+                        error = null,
+                        loading = false,
+                        success = HomeVO(
+                            allAds = ads,
+                            currentAds = filteredList,
+                            optionSelected = optionSelected
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     fun onRefreshList(optionSelected: Filter) {
         onUpdateUiState { copy(loading = true) }
         onUpdateUiState {
@@ -81,45 +120,6 @@ class HomeViewModel(
                                     it
                                 }
                             }
-                        )
-                    )
-                }
-            }
-        }
-    }
-
-    private fun handleGetAllAdsResponse(optionSelected: Filter?, result: Result<List<AdBO>>) {
-        when (result) {
-            is Result.Loading -> {
-                onUpdateUiState { copy(error = null, loading = true) }
-            }
-
-            is Result.Response.Error<*> -> {
-                onUpdateUiState {
-                    copy(
-                        error = (result.code as ErrorBO).transform(),
-                        loading = false
-                    )
-                }
-            }
-
-            is Result.Response.Success -> {
-                val ads = result.data.transform()
-                val filteredList = if (optionSelected is Type) {
-                    ads.filter { ad ->
-                        ad.type == (optionSelected as? Type)?.type
-                    }
-                } else {
-                    ads
-                }
-                onUpdateUiState {
-                    copy(
-                        error = null,
-                        loading = false,
-                        success = HomeVO(
-                            allAds = ads,
-                            currentAds = filteredList,
-                            optionSelected = optionSelected
                         )
                     )
                 }
