@@ -15,6 +15,7 @@ fun Navigation(
     modifier: Modifier = Modifier,
     startDestination: Any,
     optionSelected: Filter?,
+    onCardClicked: () -> Unit,
     onPagedChanged: (Int) -> Unit,
 ) {
 
@@ -26,10 +27,14 @@ fun Navigation(
         startDestination = startDestination
     ) {
         screenNavigation<Favorites> {
-            FavoritesScreen(optionSelected = optionSelected)
+            FavoritesScreen(optionSelected = optionSelected, onCardClicked = onCardClicked)
         }
         screenNavigation<Home> {
-            HomeScreen(optionSelected = optionSelected, onPageChanged = onPagedChanged)
+            HomeScreen(
+                optionSelected = optionSelected,
+                onCardClicked = onCardClicked,
+                onPageChanged = onPagedChanged
+            )
         }
     }
 

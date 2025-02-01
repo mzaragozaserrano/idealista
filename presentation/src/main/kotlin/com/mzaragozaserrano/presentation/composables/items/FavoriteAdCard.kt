@@ -39,7 +39,7 @@ import com.mzaragozaserrano.presentation.vo.FavoriteAdVO
 import com.mzs.core.presentation.utils.generic.emptyText
 
 @Composable
-fun FavoriteAdCard(ad: FavoriteAdVO) {
+fun FavoriteAdCard(ad: FavoriteAdVO, onCardClicked: () -> Unit) {
 
     var isPressed by remember { mutableStateOf(value = false) }
 
@@ -47,7 +47,10 @@ fun FavoriteAdCard(ad: FavoriteAdVO) {
         modifier = Modifier
             .height(IntrinsicSize.Max)
             .clip(shape = RoundedCornerShape(size = 20.dp))
-            .clickable { isPressed = isPressed.not() },
+            .clickable {
+                isPressed = isPressed.not()
+                onCardClicked()
+            },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         content = {
             Row(
@@ -140,6 +143,7 @@ private fun FavoriteAdCardPrev() {
             title = "Sor Ángela de la Cruz",
             subtitle = "Madrid",
             type = AdType.Rent
-        )
+        ),
+        onCardClicked = {}
     )
 }

@@ -16,7 +16,11 @@ import com.mzs.core.presentation.components.compose.utils.Adapter
 import com.mzs.core.presentation.utils.generic.ItemOrientation
 
 @Composable
-fun FavoritesAdsList(modifier: Modifier = Modifier, ads: Map<String, List<FavoriteAdVO>>) {
+fun FavoritesAdsList(
+    modifier: Modifier = Modifier,
+    ads: Map<String, List<FavoriteAdVO>>,
+    onCardClicked: () -> Unit,
+) {
     LazyColumn(
         modifier = modifier,
         horizontalAlignment = Alignment.Start,
@@ -42,7 +46,7 @@ fun FavoritesAdsList(modifier: Modifier = Modifier, ads: Map<String, List<Favori
                         itemOrientation = ItemOrientation.Horizontal,
                         items = adsForDay,
                         item = { _, ad ->
-                            FavoriteAdCard(ad = ad)
+                            FavoriteAdCard(ad = ad, onCardClicked = onCardClicked)
                         }
                     )
                 }

@@ -21,6 +21,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     optionSelected: Filter?,
     viewModel: HomeViewModel = koinViewModel(),
+    onCardClicked: () -> Unit,
     onPageChanged: (Int) -> Unit,
 ) {
 
@@ -53,7 +54,7 @@ fun HomeScreen(
         AnimatedVerticalViewPager(
             modifier = modifier.fillMaxSize(),
             ads = success.currentAds,
-            onCardClicked = { },
+            onCardClicked = onCardClicked,
             onFavoriteClicked = { id, isFavorite ->
                 viewModel.onFavoriteClicked(id = id, isFavorite = isFavorite)
             },

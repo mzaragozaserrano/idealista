@@ -6,7 +6,7 @@ import com.mzaragozaserrano.domain.bo.ErrorBO
 import com.mzaragozaserrano.domain.usecases.AddFavoriteAdUseCaseImpl
 import com.mzaragozaserrano.domain.usecases.GetAllAdsUseCaseImpl
 import com.mzaragozaserrano.domain.usecases.RemoveFavoriteAdUseCaseImpl
-import com.mzaragozaserrano.presentation.base.BaseViewModel
+import com.mzaragozaserrano.presentation.base.BaseComposeViewModel
 import com.mzaragozaserrano.presentation.utils.transform
 import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.Filter
@@ -18,7 +18,7 @@ class HomeViewModel(
     private val addFavoriteAd: AddFavoriteAdUseCaseImpl,
     private val getAllAds: GetAllAdsUseCaseImpl,
     private val removeFavoriteAd: RemoveFavoriteAdUseCaseImpl,
-) : BaseViewModel<HomeViewModel.HomeVO>() {
+) : BaseComposeViewModel<HomeViewModel.HomeVO>() {
 
     override fun createInitialState(): UiState<HomeVO> = UiState()
 

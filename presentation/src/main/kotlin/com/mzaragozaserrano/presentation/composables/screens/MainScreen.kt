@@ -33,7 +33,7 @@ import com.mzs.core.presentation.utils.generic.emptyText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen() {
+fun MainScreen(onCardClicked: () -> Unit) {
 
     var destination by remember { mutableStateOf<Any>(value = Home) }
     var optionSelected by remember { mutableStateOf<Filter?>(value = null) }
@@ -96,6 +96,7 @@ fun MainScreen() {
                 modifier = Modifier.padding(paddingValues = contentPadding),
                 startDestination = destination,
                 optionSelected = optionSelected,
+                onCardClicked = onCardClicked,
                 onPagedChanged = { showTopBar = it == 0 }
             )
         }

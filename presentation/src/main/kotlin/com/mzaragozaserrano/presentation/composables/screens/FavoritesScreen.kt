@@ -21,6 +21,7 @@ import org.koin.androidx.compose.koinViewModel
 fun FavoritesScreen(
     modifier: Modifier = Modifier,
     optionSelected: Filter?,
+    onCardClicked: () -> Unit,
     viewModel: FavoritesViewModel = koinViewModel(),
 ) {
 
@@ -53,7 +54,8 @@ fun FavoritesScreen(
             modifier = modifier
                 .fillMaxSize()
                 .padding(vertical = 16.dp),
-            ads = success.currentAds
+            ads = success.currentAds,
+            onCardClicked = onCardClicked
         )
     }
 

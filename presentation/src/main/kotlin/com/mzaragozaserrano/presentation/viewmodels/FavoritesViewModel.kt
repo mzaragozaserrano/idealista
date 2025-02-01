@@ -2,20 +2,18 @@ package com.mzaragozaserrano.presentation.viewmodels
 
 import androidx.lifecycle.viewModelScope
 import com.mzaragozaserrano.domain.usecases.GetAllFavoritesUseCaseImpl
-import com.mzaragozaserrano.presentation.base.BaseViewModel
+import com.mzaragozaserrano.presentation.base.BaseComposeViewModel
 import com.mzaragozaserrano.presentation.utils.transform
 import com.mzaragozaserrano.presentation.vo.FavoriteAdVO
 import com.mzaragozaserrano.presentation.vo.Filter
 import com.mzaragozaserrano.presentation.vo.Type
 import com.mzs.core.domain.utils.generic.DateUtils
-import com.mzs.core.domain.utils.generic.ddMMyyyy
 import kotlinx.coroutines.launch
 
 class FavoritesViewModel(
     private val dateUtils: DateUtils,
     private val getAllFavorites: GetAllFavoritesUseCaseImpl,
-) :
-    BaseViewModel<FavoritesViewModel.FavoritesVO>() {
+) : BaseComposeViewModel<FavoritesViewModel.FavoritesVO>() {
 
     override fun createInitialState(): UiState<FavoritesVO> = UiState()
 

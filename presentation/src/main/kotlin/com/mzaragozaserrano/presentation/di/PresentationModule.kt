@@ -1,5 +1,6 @@
 package com.mzaragozaserrano.presentation.di
 
+import com.mzaragozaserrano.presentation.viewmodels.DetailViewModel
 import com.mzaragozaserrano.presentation.viewmodels.FavoritesViewModel
 import com.mzaragozaserrano.presentation.viewmodels.HomeViewModel
 import com.mzaragozaserrano.presentation.viewmodels.MainViewModel
@@ -8,6 +9,7 @@ import org.koin.dsl.module
 
 val presentationModule = module {
     // ViewModels
+    viewModelOf(::DetailViewModel)
     viewModelOf(::FavoritesViewModel)
     viewModelOf(::HomeViewModel)
     viewModelOf(::MainViewModel)
