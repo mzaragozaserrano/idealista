@@ -11,14 +11,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.mzaragozaserrano.presentation.vo.FavoriteAdVO
+import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzs.core.presentation.components.compose.utils.Adapter
 import com.mzs.core.presentation.utils.generic.ItemOrientation
 
 @Composable
 fun FavoritesAdsList(
     modifier: Modifier = Modifier,
-    ads: Map<String, List<FavoriteAdVO>>,
+    ads: Map<String, List<AdVO>>,
     onCardClicked: () -> Unit,
 ) {
     LazyColumn(

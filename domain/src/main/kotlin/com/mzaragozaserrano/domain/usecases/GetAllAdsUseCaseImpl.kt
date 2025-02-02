@@ -36,7 +36,7 @@ class GetAllAdsUseCaseImpl(
             }
 
             is Result.Response.Success -> {
-                val listFavoriteIds = favoritesRepository.getAllFavorites().map { it.id }
+                val listFavoriteIds = favoritesRepository.getAllFavorites().map { it.propertyCode }
                 val list = result.data
                 list.map { ad ->
                     ad.isFavorite = ad.propertyCode in listFavoriteIds

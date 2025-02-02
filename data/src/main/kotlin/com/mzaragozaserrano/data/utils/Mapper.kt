@@ -5,7 +5,6 @@ import com.mzaragozaserrano.data.dto.DetailedAdDTO
 import com.mzaragozaserrano.data.dto.EnergyCertificationDTO
 import com.mzaragozaserrano.data.dto.EnergyTypeDTO
 import com.mzaragozaserrano.data.dto.ErrorDTO
-import com.mzaragozaserrano.data.dto.FavoriteAdDTO
 import com.mzaragozaserrano.data.dto.FeaturesDTO
 import com.mzaragozaserrano.data.dto.ImageDTO
 import com.mzaragozaserrano.data.dto.ImageDetailDTO
@@ -21,7 +20,6 @@ import com.mzaragozaserrano.domain.bo.DetailedAdBO
 import com.mzaragozaserrano.domain.bo.EnergyCertificationBO
 import com.mzaragozaserrano.domain.bo.EnergyTypeBO
 import com.mzaragozaserrano.domain.bo.ErrorBO
-import com.mzaragozaserrano.domain.bo.FavoriteAdBO
 import com.mzaragozaserrano.domain.bo.FeaturesBO
 import com.mzaragozaserrano.domain.bo.ImageBO
 import com.mzaragozaserrano.domain.bo.ImageDetailBO
@@ -36,7 +34,6 @@ import com.mzaragozaserrano.domain.bo.UbicationBO
 import com.mzs.core.data.datasources.local.ResourcesDataSource
 import com.mzs.core.domain.utils.generic.DateUtils
 import com.mzs.core.domain.utils.generic.ddMMyyyy_HHmm
-import java.util.UUID
 
 fun List<AdDTO>.transform(resourcesDataSource: ResourcesDataSource): List<AdBO> =
     map { it.transform(resourcesDataSource = resourcesDataSource) }
@@ -45,6 +42,7 @@ fun AdDTO.transform(resourcesDataSource: ResourcesDataSource): AdBO = AdBO(
     address = address,
     bathrooms = bathrooms,
     country = country,
+    date = date,
     description = description,
     district = district,
     exterior = exterior.transform(resourcesDataSource = resourcesDataSource),
@@ -72,6 +70,14 @@ private fun Boolean?.transform(resourcesDataSource: ResourcesDataSource): String
         true -> resourcesDataSource.getStringFromResource(StringResource.Exterior.textId)
         false -> resourcesDataSource.getStringFromResource(StringResource.Interior.textId)
         null -> null
+    }
+}
+
+private fun String?.transformToAdBoolean(resourcesDataSource: ResourcesDataSource): Boolean? {
+    return when (this) {
+        resourcesDataSource.getStringFromResource(StringResource.Exterior.textId) -> true
+        resourcesDataSource.getStringFromResource(StringResource.Interior.textId) -> false
+        else -> null
     }
 }
 
@@ -169,26 +175,53 @@ fun ErrorDTO.transform(): ErrorBO = when (this) {
     is ErrorDTO.LoadingURL -> ErrorBO.LoadingURL
 }
 
-fun FavoriteAdDTO.transform(): FavoriteAdBO =
-    FavoriteAdBO(
-        id = id.toString(),
-        date = date,
-        operation = operation,
-        price = price,
-        subtitle = subtitle,
-        thumbnail = thumbnail,
-        title = title
-    )
-
-fun FavoriteAdBO.transform(dateUtils: DateUtils? = null): FavoriteAdDTO {
+fun AdBO.transform(dateUtils: DateUtils? = null, resourcesDataSource: ResourcesDataSource): AdDTO {
     val dateAux = dateUtils?.getCurrentDate(formatOut = ddMMyyyy_HHmm) ?: date.orEmpty()
-    return FavoriteAdDTO(
-        id = id?.toInt() ?: UUID.randomUUID().toString().toInt(),
+    return AdDTO(
+        address = address,
+        bathrooms = bathrooms,
+        country = country,
         date = dateAux,
+        description = description,
+        district = district,
+        exterior = exterior.transformToAdBoolean(resourcesDataSource = resourcesDataSource),
+        features = features?.transform(),
+        floor = floor,
+        latitude = latitude,
+        longitude = longitude,
+        multimedia = multimedia?.transform(),
+        municipality = municipality,
+        neighborhood = neighborhood,
         operation = operation,
+        parkingSpace = parkingSpace?.transform(),
         price = price,
-        subtitle = subtitle,
-        thumbnail = thumbnail,
-        title = title
+        priceInfo = priceInfo?.transform(),
+        propertyCode = propertyCode,
+        propertyType = propertyType,
+        province = province,
+        rooms = rooms,
+        size = size,
+        thumbnail = thumbnail
     )
 }
+
+fun FeaturesBO.transform(): FeaturesDTO = FeaturesDTO(
+    hasAirConditioning = hasAirConditioning,
+    hasBoxRoom = hasBoxRoom,
+    hasGarden = hasGarden,
+    hasSwimmingPool = hasSwimmingPool,
+    hasTerrace = hasTerrace
+)
+
+fun MultimediaBO.transform(): MultimediaDTO = MultimediaDTO(images = images?.map { it.transform() })
+
+fun ImageBO.transform(): ImageDTO = ImageDTO(url = url, tag = tag)
+
+fun ParkingSpaceBO.transform(): ParkingSpaceDTO = ParkingSpaceDTO(
+    hasParkingSpace = hasParkingSpace,
+    isParkingSpaceIncludedInPrice = isParkingSpaceIncludedInPrice
+)
+
+fun PriceInfoBO.transform(): PriceInfoDTO = PriceInfoDTO(price = price?.transform())
+
+fun PriceBO.transform(): PriceDTO = PriceDTO(amount = amount, currencySuffix = currencySuffix)

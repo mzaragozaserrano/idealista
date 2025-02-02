@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.mzaragozaserrano.domain.usecases.GetAllFavoritesUseCaseImpl
 import com.mzaragozaserrano.presentation.base.BaseComposeViewModel
 import com.mzaragozaserrano.presentation.utils.transform
-import com.mzaragozaserrano.presentation.vo.FavoriteAdVO
+import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.Filter
 import com.mzaragozaserrano.presentation.vo.Type
 import com.mzs.core.domain.utils.generic.DateUtils
@@ -66,8 +66,8 @@ class FavoritesViewModel(
     }
 
     data class FavoritesVO(
-        val allAds: List<FavoriteAdVO>,
-        val currentAds: Map<String, List<FavoriteAdVO>>,
+        val allAds: List<AdVO>,
+        val currentAds: Map<String, List<AdVO>>,
         val optionSelected: Filter? = null,
     )
 

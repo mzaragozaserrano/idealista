@@ -27,19 +27,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import com.mzaragozaserrano.presentation.R
-import com.mzaragozaserrano.presentation.vo.AdType
-import com.mzaragozaserrano.presentation.vo.FavoriteAdVO
+import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzs.core.presentation.utils.generic.emptyText
 
 @Composable
-fun FavoriteAdCard(ad: FavoriteAdVO, onCardClicked: () -> Unit) {
+fun FavoriteAdCard(ad: AdVO, onCardClicked: () -> Unit) {
 
     var isPressed by remember { mutableStateOf(value = false) }
 
@@ -101,7 +99,7 @@ fun FavoriteAdCard(ad: FavoriteAdVO, onCardClicked: () -> Unit) {
                                             color = MaterialTheme.colorScheme.onSurface,
                                             maxLines = 1,
                                             overflow = TextOverflow.Ellipsis,
-                                            text = ad.price,
+                                            text = ad.price + ad.currencySuffix,
                                             style = MaterialTheme.typography.titleMedium
                                         )
                                     }
@@ -129,21 +127,4 @@ fun FavoriteAdCard(ad: FavoriteAdVO, onCardClicked: () -> Unit) {
         }
     )
 
-}
-
-@PreviewLightDark
-@Composable
-private fun FavoriteAdCardPrev() {
-    FavoriteAdCard(
-        ad = FavoriteAdVO(
-            id = "1",
-            date = "01/01/2001 00:00",
-            price = "1.100.000",
-            thumbnail = "https://via.placeholder.com/150",
-            title = "Sor Ángela de la Cruz",
-            subtitle = "Madrid",
-            type = AdType.Rent
-        ),
-        onCardClicked = {}
-    )
 }

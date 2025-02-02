@@ -1,9 +1,9 @@
 package com.mzaragozaserrano.domain.repositories.local
 
-import com.mzaragozaserrano.domain.bo.FavoriteAdBO
+import com.mzaragozaserrano.domain.bo.AdBO
 
 interface FavoritesRepository {
-    fun addFavorite(ad: FavoriteAdBO): Boolean
-    fun getAllFavorites(): List<FavoriteAdBO>
-    fun removeFavorite(ad: FavoriteAdBO): Boolean
+    fun addFavorite(ad: AdBO): Boolean
+    fun getAllFavorites(): List<AdBO>
+    fun removeFavorite(ad: AdBO): Boolean
 }

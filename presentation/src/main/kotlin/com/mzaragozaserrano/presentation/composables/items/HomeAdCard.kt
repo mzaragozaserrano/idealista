@@ -4,10 +4,7 @@ import android.graphics.RenderEffect
 import android.graphics.Shader
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseInOut
-import androidx.compose.animation.core.EaseOutCubic
-import androidx.compose.animation.core.EaseOutExpo
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
@@ -174,14 +171,14 @@ fun HomeAdCard(
                             )
                         }
                     }
-                    ads[page].prefixTitle?.let { prefixId ->
+                    ads[page].prefixTitle?.let { prefix ->
                         if (ads[page].title.isNotEmpty()) {
                             item {
                                 Text(
                                     color = MaterialTheme.colorScheme.onSurface,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
-                                    text = stringResource(id = prefixId, ads[page].title),
+                                    text = stringResource(id = prefix.textId, ads[page].title),
                                     style = MaterialTheme.typography.bodySmall
                                 )
                             }
@@ -205,7 +202,7 @@ fun HomeAdCard(
                                 color = MaterialTheme.colorScheme.onSurface,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                text = ads[page].price,
+                                text = ads[page].price + ads[page].currencySuffix,
                                 style = MaterialTheme.typography.headlineMedium
                             )
                         }

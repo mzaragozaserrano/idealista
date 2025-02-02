@@ -42,6 +42,9 @@ dependencies {
     //----- ANDROIDX ----------/
     implementation(libs.androidx.paging.runtime)
 
+    //-----  GSON ----------/
+    implementation(libs.gson)
+
     //-----  JSON PARSER ----------/
     implementation(libs.moshi.kotlin)
 

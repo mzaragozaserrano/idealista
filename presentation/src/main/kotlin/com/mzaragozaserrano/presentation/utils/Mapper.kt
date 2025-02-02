@@ -3,15 +3,15 @@ package com.mzaragozaserrano.presentation.utils
 import com.mzaragozaserrano.domain.bo.AdBO
 import com.mzaragozaserrano.domain.bo.DetailedAdBO
 import com.mzaragozaserrano.domain.bo.ErrorBO
-import com.mzaragozaserrano.domain.bo.FavoriteAdBO
 import com.mzaragozaserrano.domain.bo.FeaturesBO
+import com.mzaragozaserrano.domain.bo.ParkingSpaceBO
 import com.mzaragozaserrano.domain.bo.PriceBO
+import com.mzaragozaserrano.domain.bo.PriceInfoBO
 import com.mzaragozaserrano.domain.bo.StringResource
 import com.mzaragozaserrano.presentation.vo.AdType
 import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.DetailedAdVO
 import com.mzaragozaserrano.presentation.vo.ErrorVO
-import com.mzaragozaserrano.presentation.vo.FavoriteAdVO
 import com.mzaragozaserrano.presentation.vo.Feature
 import com.mzaragozaserrano.presentation.vo.Info
 import com.mzs.core.domain.utils.generic.DateUtils
@@ -44,6 +44,8 @@ fun AdBO.transform(): AdVO {
     )
     val title = address.orEmpty().capitalize()
     return AdVO(
+        currencySuffix = priceInfo?.price?.currencySuffix.orEmpty(),
+        date = date,
         extraInfo = extraInfo,
         hasNotInformation = extraInfo.isEmpty() && features.isEmpty() && price.isEmpty() && subtitle.isEmpty() && title.isEmpty(),
         id = propertyCode.orEmpty(),
@@ -93,9 +95,9 @@ fun FeaturesBO?.transform(hasParking: Boolean): List<Feature> {
     return features
 }
 
-private fun String?.transformToStringResource(): Int? {
+private fun String?.transformToStringResource(): StringResource? {
     return when (this) {
-        "flat" -> StringResource.Flat.textId
+        "flat" -> StringResource.Flat
         else -> null
     }
 }
@@ -113,12 +115,29 @@ fun PriceBO?.transform(): String {
     format.applyPattern("#,###.##")
     return if (this != null) {
         try {
-            format.format(amount) + currencySuffix
+            format.format(amount)
         } catch (e: ParseException) {
             emptyText
         }
     } else {
         emptyText
+    }
+}
+
+fun String.transform(currencySuffix: String?): PriceInfoBO? {
+    val format = DecimalFormat("#,###.##")
+    val parsedPrice = try {
+        format.parse(this)?.toDouble()
+    } catch (e: ParseException) {
+        null
+    }
+    return parsedPrice?.let {
+        PriceInfoBO(
+            price = PriceBO(
+                amount = it,
+                currencySuffix = currencySuffix
+            )
+        )
     }
 }
 
@@ -133,28 +152,8 @@ private fun createSubtitle(
             subtitle.append("$province - $district, $municipality")
         }
 
-        province != null && district != null -> {
-            subtitle.append("$province - $district")
-        }
-
-        province != null && municipality != null -> {
-            subtitle.append("$province, $municipality")
-        }
-
-        district != null && municipality != null -> {
-            subtitle.append("$district, $municipality")
-        }
-
         province != null -> {
             subtitle.append(province)
-        }
-
-        district != null -> {
-            subtitle.append(district)
-        }
-
-        municipality != null -> {
-            subtitle.append(municipality)
         }
 
         else -> {
@@ -164,15 +163,66 @@ private fun createSubtitle(
     return subtitle.toString()
 }
 
-fun AdVO.transform(): FavoriteAdBO =
-    FavoriteAdBO(
-        id = id,
+private fun String.getLocation(): Triple<String?, String?, String?> {
+    return when {
+        contains(" - ") && contains(",") -> {
+            val parts = split(" - ", ",")
+            Triple(parts[0], parts[1], parts[2])
+        }
+
+        contains(" - ") -> {
+            val parts = split(" - ")
+            Triple(parts[0], parts[1], null)
+        }
+
+        contains(",") -> {
+            val parts = split(",")
+            Triple(null, parts[0], parts[1])
+        }
+
+        else -> {
+            Triple(this, null, null)
+        }
+    }
+}
+
+fun AdVO.transform(): AdBO {
+    val exterior = extraInfo.filterIsInstance<Info.Floor>().firstOrNull()?.secondValue
+    val floor = extraInfo.filterIsInstance<Info.Floor>().firstOrNull()?.value
+    val rooms = extraInfo.filterIsInstance<Info.Rooms>().firstOrNull()?.value?.toIntOrNull()
+    val size =
+        extraInfo.filterIsInstance<Info.SquareMeters>().firstOrNull()?.value?.toDoubleOrNull()
+    val (province, district, municipality) = subtitle.getLocation()
+    return AdBO(
+        address = title.lowercase(),
+        district = district,
+        exterior = exterior,
+        features = FeaturesBO(
+            hasAirConditioning = features.contains(Feature.AirConditioning),
+            hasBoxRoom = features.contains(Feature.BoxRoom),
+            hasGarden = features.contains(Feature.Garden),
+            hasSwimmingPool = features.contains(Feature.SwimmingPool),
+            hasTerrace = features.contains(Feature.Terrace)
+        ),
+        floor = floor,
+        isFavorite = isFavorite,
+        municipality = municipality,
         operation = type.transform(),
-        price = price,
-        subtitle = subtitle,
-        thumbnail = thumbnail,
-        title = title
+        parkingSpace = ParkingSpaceBO(hasParkingSpace = features.contains(Feature.Parking)),
+        priceInfo = price.transform(currencySuffix = currencySuffix),
+        propertyCode = id,
+        propertyType = prefixTitle.transform(),
+        province = province,
+        rooms = rooms,
+        size = size,
+        thumbnail = thumbnail
     )
+}
+
+private fun StringResource?.transform(): String? {
+    return if (this is StringResource.Flat) "flat" else null
+}
+
 
 private fun AdType?.transform(): String? {
     return when (this) {
@@ -182,17 +232,7 @@ private fun AdType?.transform(): String? {
     }
 }
 
-fun FavoriteAdBO.transform(): FavoriteAdVO = FavoriteAdVO(
-    id = id.orEmpty(),
-    date = date.orEmpty(),
-    price = price.orEmpty(),
-    subtitle = subtitle.orEmpty(),
-    title = title.orEmpty(),
-    thumbnail = thumbnail.orEmpty(),
-    type = operation.transformToAdType()
-)
-
-fun List<FavoriteAdVO>.transform(dateUtils: DateUtils) = groupBy { ad ->
+fun List<AdVO>.transform(dateUtils: DateUtils) = groupBy { ad ->
     dateUtils.formatDateToFriendlyString(
         dateUtils.convertStringToLocalDate(
             dateString = ad.date?.split(" ")?.get(0).orEmpty(),
