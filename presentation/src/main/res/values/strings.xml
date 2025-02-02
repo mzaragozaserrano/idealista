@@ -9,6 +9,8 @@
     <string name="button_not_saved">Guardar</string>
     <string name="button_saved">Guardado</string>
     //----- DETAIL ----------/
+    <string name="see_less">Ver menos</string>
+    <string name="see_more">Ver más</string>
     <string name="title_description">Comentario del anunciante</string>
     //----- DIALOG ----------/
     <string name="title_error">Error</string>
@@ -21,6 +23,8 @@
     <string name="error_loading_url">Error cargando la URL</string>
     //----- FAVORITES ----------/
     <string name="favorite_ad_saved">Guardado a las %1$sh.</string>
+    <string name="not_favorites_subtitle">Agrega tu primer favorito para poder ver algo aquí</string>
+    <string name="not_favorites_title">Lo sentimos</string>
     //----- FILTER ----------/
     <string name="filter_all">Todos</string>
     //----- LABELS ----------/
@@ -45,9 +49,6 @@
         <item quantity="one">%d habitación</item>
         <item quantity="other">%d habitaciones</item>
     </plurals>
-    //----- TEXT ----------/
-    <string name="see_less">Ver menos</string>
-    <string name="see_more">Ver más</string>
     //----- TOOLBAR ----------/
     <string name="favorites_home">Idealista</string>
     <string name="favorites_toolbar">Tus favoritos</string>

@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mzaragozaserrano.presentation.R
@@ -85,11 +86,21 @@ fun FavoritesScreen(
                     alignment = Alignment.CenterVertically
                 ),
                 content = {
-                    LottieImage(animationId = R.raw.image_loading)
+                    LottieImage(animationId = R.raw.empty_favorites)
                     Text(
+                        modifier = Modifier.padding(horizontal = 32.dp),
                         color = MaterialTheme.colorScheme.onBackground,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.headlineMedium,
-                        text = "Agrega tu primer favorito para poder ver algo aquí",
+                        text = stringResource(id = R.string.not_favorites_title),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        modifier = Modifier.padding(horizontal = 32.dp),
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.headlineSmall,
+                        text = stringResource(id = R.string.not_favorites_subtitle),
                         textAlign = TextAlign.Center
                     )
                 }

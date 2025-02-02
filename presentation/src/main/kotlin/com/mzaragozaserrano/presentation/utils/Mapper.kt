@@ -215,6 +215,8 @@ fun AdVO.transform(): AdBO {
         floor = floor,
         isFavorite = isFavorite,
         municipality = municipality,
+        latitude = latitude,
+        longitude = longitude,
         operation = type.transform(),
         parkingSpace = ParkingSpaceBO(hasParkingSpace = features.contains(Feature.Parking)),
         priceInfo = price.transform(currencySuffix = currencySuffix),
