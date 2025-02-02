@@ -10,7 +10,7 @@
         android:id="@+id/compose_multimedia"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.4"
+        android:layout_weight="0.25"
         app:layout_constraintBottom_toTopOf="@id/layout_info"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
         android:id="@+id/layout_info"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.6"
+        android:layout_weight="0.75"
         android:background="@color/background"
         android:orientation="vertical"
         android:padding="24dp"
@@ -94,7 +94,7 @@
                     android:id="@+id/compose_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginVertical="12dp" />
+                    android:layout_marginVertical="16dp" />
 
                 <include
                     android:id="@+id/generic_card"
