@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.mzaragozaserrano.presentation.vo.Filter
@@ -108,4 +109,10 @@ fun FilterButton(filterSelected: Filter? = null, onOptionClicked: (Filter) -> Un
             )
         }
     }
+}
+
+@PreviewLightDark
+@Composable
+private fun FilterButtonPrev() {
+    FilterButton {  }
 }

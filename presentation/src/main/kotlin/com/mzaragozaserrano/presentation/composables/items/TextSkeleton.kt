@@ -1,5 +1,6 @@
 package com.mzaragozaserrano.presentation.composables.items
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,10 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.mzs.core.presentation.components.compose.utils.Skeletonable
 import com.mzs.core.presentation.components.compose.utils.SkeletonableItem
+import com.mzs.core.presentation.components.compose.utils.toSkeletonable
 import com.mzs.core.presentation.utils.extensions.conditional
 import com.mzs.core.presentation.utils.functions.rememberShimmerBrush
 
@@ -54,6 +57,7 @@ fun TextSkeleton(
         content = { text ->
             if (text.isNotEmpty()) {
                 Text(
+                    modifier = Modifier.animateContentSize(),
                     color = textColor,
                     maxLines = maxLines,
                     overflow = TextOverflow.Ellipsis,
@@ -99,5 +103,15 @@ fun TextSkeleton(
                 style = textStyle
             )
         }
+    )
+}
+
+@PreviewLightDark
+@Composable
+private fun TextSkeletonPrev() {
+    TextSkeleton(
+        skeletonable = "Texto de prueba".toSkeletonable(),
+        textColor = Color.Black,
+        textStyle = MaterialTheme.typography.bodySmall
     )
 }

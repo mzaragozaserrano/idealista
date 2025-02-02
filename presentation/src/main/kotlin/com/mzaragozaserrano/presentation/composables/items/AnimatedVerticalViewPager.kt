@@ -1,12 +1,10 @@
-package com.mzaragozaserrano.presentation.composables.screens
+package com.mzaragozaserrano.presentation.composables.items
 
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.mzaragozaserrano.presentation.composables.items.HomeAdCard
 import com.mzaragozaserrano.presentation.vo.AdVO
 
 @Composable
