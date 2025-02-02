@@ -45,6 +45,9 @@
         <item quantity="one">%d habitación</item>
         <item quantity="other">%d habitaciones</item>
     </plurals>
+    //----- TEXT ----------/
+    <string name="see_less">Ver menos</string>
+    <string name="see_more">Ver más</string>
     //----- TOOLBAR ----------/
     <string name="favorites_home">Idealista</string>
     <string name="favorites_toolbar">Tus favoritos</string>

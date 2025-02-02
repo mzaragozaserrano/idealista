@@ -5,11 +5,18 @@ import android.text.TextUtils
 import android.view.View
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
@@ -31,6 +38,7 @@ import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.DetailedAdVO
 import com.mzaragozaserrano.presentation.vo.MoreInfo
 import com.mzs.core.presentation.components.compose.images.LottieImage
+import com.mzs.core.presentation.components.compose.utils.hasData
 import com.mzs.core.presentation.utils.extensions.getSerializableArgument
 import com.mzs.core.presentation.utils.viewBinding.viewBinding
 import kotlinx.coroutines.launch
@@ -154,7 +162,6 @@ class DetailFragment :
     private fun AdVO.setUpSubtitle() {
         if (subtitle.isNotEmpty()) {
             binding.textViewSubtitle.text = subtitle
-//            binding.textViewSubtitle.layout.getEllipsisCount(binding.textViewSubtitle.layout.lineCount - 1) > 0
         } else {
             binding.textViewSubtitle.visibility = View.INVISIBLE
         }
@@ -174,6 +181,7 @@ class DetailFragment :
     private fun DetailedAdVO.setUpDescription() {
         binding.composeDescription.setContent {
             IdealistaAppTheme {
+                var expanded by remember { mutableStateOf(value = false) }
                 Column(
                     verticalArrangement = Arrangement.spacedBy(space = 4.dp),
                     content = {
@@ -187,10 +195,22 @@ class DetailFragment :
                         TextSkeleton(
                             height = 16.dp,
                             skeletonable = description,
-                            maxLines = 5,
+                            maxLines = if (expanded) Int.MAX_VALUE else 5,
                             textColor = MaterialTheme.colorScheme.onBackground,
                             textStyle = MaterialTheme.typography.titleMedium
                         )
+                        if (description.hasData()) {
+                            Text(
+                                modifier = Modifier.clickable { expanded = expanded.not() },
+                                color = MaterialTheme.colorScheme.primary,
+                                style = MaterialTheme.typography.labelLarge,
+                                text = if (expanded) {
+                                    stringResource(id = R.string.see_less)
+                                } else {
+                                    stringResource(id = R.string.see_more)
+                                }
+                            )
+                        }
                     }
                 )
             }
