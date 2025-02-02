@@ -56,6 +56,8 @@ fun AdBO.transform(isFavorite: Boolean? = null): AdVO {
         id = propertyCode.orEmpty(),
         isFavorite = isFavorite ?: this.isFavorite,
         features = features,
+        latitude = latitude,
+        longitude = longitude,
         prefixTitle = propertyType.transformToStringResource(),
         price = price,
         subtitle = subtitle,
@@ -249,8 +251,6 @@ fun List<AdVO>.transform(dateUtils: DateUtils) = groupBy { ad ->
 
 fun DetailedAdBO.transform(): DetailedAdVO = DetailedAdVO(
     description = propertyComment.orEmpty().toSkeletonable(),
-    latitude = ubication?.latitude,
-    longitude = ubication?.longitude,
     moreInfo = moreCharacteristics?.transform(energyCertification = energyCertification),
     multimedia = multimedia?.images?.map { it.url.orEmpty() }.orEmpty(),
     titleId = PresentationStringResource.TitleDescription.textId.toSkeletonable()

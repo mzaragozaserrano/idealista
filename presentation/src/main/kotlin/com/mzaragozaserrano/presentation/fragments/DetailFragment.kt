@@ -72,6 +72,19 @@ class DetailFragment :
                 viewModel.uiState.collect(::handleUiState)
             }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.navigationEvent.collect(::handleNavigation)
+            }
+        }
+    }
+
+    private fun handleNavigation(navigationEvent: BaseComposeViewModel.NavigationEvent) {
+        when (navigationEvent) {
+            is DetailViewModel.NavigationType.GoogleMaps -> {
+                startActivity(navigationEvent.intent)
+            }
+        }
     }
 
     private fun handleUiState(uiState: BaseComposeViewModel.UiState<DetailViewModel.DetailVO>) {
@@ -109,8 +122,11 @@ class DetailFragment :
             IdealistaAppTheme {
                 DetailButtons(
                     isFavorite = isFavorite,
+                    isMapButtonEnabled = latitude != null && longitude != null,
                     onFavoriteButtonClicked = { isFavorite -> viewModel.onSetFavorite(isFavorite = isFavorite) },
-                    onMapButtonClicked = {}
+                    onMapButtonClicked = {
+                        viewModel.onGoToGoogleMaps(latitude = latitude, longitude = longitude)
+                    }
                 )
             }
         }
@@ -233,6 +249,7 @@ class DetailFragment :
                             )
                         )
                     }
+
                     is MoreInfo.Generic.ConstructedArea -> {
                         binding.genericCard.contentInfo.addView(
                             adInfo(
@@ -243,6 +260,7 @@ class DetailFragment :
                             )
                         )
                     }
+
                     is MoreInfo.Generic.Rooms -> {
                         binding.genericCard.contentInfo.addView(
                             adInfo(
@@ -254,6 +272,7 @@ class DetailFragment :
                             )
                         )
                     }
+
                     is MoreInfo.Generic.Status -> {
                         binding.genericCard.contentInfo.addView(adInfo(text = info.value))
                     }

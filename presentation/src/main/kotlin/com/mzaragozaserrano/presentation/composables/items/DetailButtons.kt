@@ -15,6 +15,7 @@ import com.mzs.core.presentation.components.compose.buttons.PushedButton
 fun DetailButtons(
     modifier: Modifier = Modifier,
     isFavorite: Boolean,
+    isMapButtonEnabled: Boolean,
     onFavoriteButtonClicked: (Boolean) -> Unit,
     onMapButtonClicked: () -> Unit,
 ) {
@@ -27,6 +28,7 @@ fun DetailButtons(
                 .fillMaxWidth()
                 .weight(weight = 1f),
             buttonBackgroundColor = MaterialTheme.colorScheme.primary,
+            enabled = isMapButtonEnabled,
             text = stringResource(id = R.string.button_map),
             textColor = MaterialTheme.colorScheme.onPrimary,
             textStyle = MaterialTheme.typography.bodyLarge,

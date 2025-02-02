@@ -1,5 +1,6 @@
 package com.mzaragozaserrano.presentation.viewmodels
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewModelScope
@@ -7,6 +8,7 @@ import com.mzaragozaserrano.domain.bo.DetailedAdBO
 import com.mzaragozaserrano.domain.bo.ErrorBO
 import com.mzaragozaserrano.domain.usecases.AddFavoriteAdUseCaseImpl
 import com.mzaragozaserrano.domain.usecases.GetDetailedAdUseCaseImpl
+import com.mzaragozaserrano.domain.usecases.OpenGoogleMapsUseCaseImpl
 import com.mzaragozaserrano.domain.usecases.RemoveFavoriteAdUseCaseImpl
 import com.mzaragozaserrano.presentation.base.BaseComposeViewModel
 import com.mzaragozaserrano.presentation.fragments.DetailFragment
@@ -14,11 +16,13 @@ import com.mzaragozaserrano.presentation.utils.transform
 import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.DetailedAdVO
 import com.mzs.core.domain.bo.Result
+import com.mzs.core.domain.utils.extensions.safeLet
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
     private val addFavoriteAd: AddFavoriteAdUseCaseImpl,
     private val getDetailedAd: GetDetailedAdUseCaseImpl,
+    private val openGoogleMaps: OpenGoogleMapsUseCaseImpl,
     private val removeFavoriteAd: RemoveFavoriteAdUseCaseImpl,
 ) : BaseComposeViewModel<DetailViewModel.DetailVO>() {
 
@@ -30,8 +34,6 @@ class DetailViewModel(
         }
         onExecuteGetDetailedAd()
     }
-
-    fun getAd(): AdVO? = getViewModelState().success?.ad
 
     fun onCheckChanged(): Bundle {
         with(getViewModelState()) {
@@ -74,6 +76,21 @@ class DetailViewModel(
         }
     }
 
+    fun onGoToGoogleMaps(latitude: Double?, longitude: Double?) {
+        safeLet(latitude, longitude) { lat, long ->
+            onNavigate(
+                NavigationType.GoogleMaps(
+                    openGoogleMaps(
+                        OpenGoogleMapsUseCaseImpl.Params(
+                            latitude = lat,
+                            longitude = long
+                        )
+                    )
+                )
+            )
+        }
+    }
+
     fun onSetFavorite(isFavorite: Boolean) {
         with(getViewModelState()) {
             success?.ad?.let { ad ->
@@ -94,5 +111,9 @@ class DetailViewModel(
         val initAd: AdVO,
         val detailedAd: DetailedAdVO = DetailedAdVO(),
     )
+
+    sealed class NavigationType : NavigationEvent {
+        data class GoogleMaps(val intent: Intent) : NavigationType()
+    }
 
 }

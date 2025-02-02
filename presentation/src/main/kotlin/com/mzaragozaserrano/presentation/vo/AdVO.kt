@@ -11,6 +11,8 @@ data class AdVO(
     val hasNotInformation: Boolean,
     val id: String,
     var isFavorite: Boolean,
+    val latitude: Double? = null,
+    val longitude: Double?,
     val prefixTitle: DomainStringResource?,
     val price: String,
     val subtitle: String,
