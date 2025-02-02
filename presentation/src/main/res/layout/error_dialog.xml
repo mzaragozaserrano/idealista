@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/error_container"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_view_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunito_bold"
+        android:textColor="@color/on_error_container"
+        android:textSize="22sp"
+        tools:text="Salir" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_view_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="16dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/nunito_regular"
+        android:maxLines="5"
+        android:textColor="@color/on_error_container"
+        android:textSize="16sp"
+        tools:text="¿Seguro que quieres salir del proceso?" />
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/button_compose"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

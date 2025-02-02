@@ -24,6 +24,8 @@ import com.mzaragozaserrano.presentation.composables.items.MultimediaCarousel
 import com.mzaragozaserrano.presentation.composables.items.TextSkeleton
 import com.mzaragozaserrano.presentation.databinding.FragmentDetailBinding
 import com.mzaragozaserrano.presentation.theme.IdealistaAppTheme
+import com.mzaragozaserrano.presentation.utils.hideError
+import com.mzaragozaserrano.presentation.utils.showError
 import com.mzaragozaserrano.presentation.viewmodels.DetailViewModel
 import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.DetailedAdVO
@@ -90,10 +92,19 @@ class DetailFragment :
     private fun handleUiState(uiState: BaseComposeViewModel.UiState<DetailViewModel.DetailVO>) {
         when {
             uiState.error != null -> {
-
+                uiState.success?.ad?.let { adAux -> setUpInitialView(ad = adAux) }
+                showError(
+                    buttonText = getString(R.string.button_retry),
+                    message = getString(uiState.error.messageId),
+                    title = getString(R.string.title_error),
+                    onButtonClicked = {
+                        viewModel.onExecuteGetDetailedAd()
+                    }
+                )
             }
 
             uiState.success != null -> {
+                hideError()
                 setUpDetailedView(uiState.success.detailedAd)
                 setUpInitialView(uiState.success.ad)
             }

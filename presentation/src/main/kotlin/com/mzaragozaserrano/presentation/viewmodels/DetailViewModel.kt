@@ -56,12 +56,12 @@ class DetailViewModel(
     private fun handleGetDetailedAdResponse(result: Result<DetailedAdBO>) {
         when (result) {
             is Result.Loading -> {
-                onUpdateUiState { copy(error = null) }
+                onUpdateUiState { copy(error = null, loading = true) }
             }
 
             is Result.Response.Error<*> -> {
                 onUpdateUiState {
-                    copy(error = (result.code as ErrorBO).transform())
+                    copy(error = (result.code as ErrorBO).transform(), loading = false)
                 }
             }
 
@@ -69,6 +69,7 @@ class DetailViewModel(
                 onUpdateUiState {
                     copy(
                         error = null,
+                        loading = false,
                         success = success?.copy(detailedAd = result.data.transform())
                     )
                 }

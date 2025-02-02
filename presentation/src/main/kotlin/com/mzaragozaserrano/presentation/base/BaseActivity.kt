@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.bundle.Bundle
 import androidx.viewbinding.ViewBinding
 import com.airbnb.lottie.LottieAnimationView
+import com.mzaragozaserrano.presentation.dialog.ErrorDialog
 import com.mzs.core.R
 
 abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
@@ -39,10 +40,35 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity() {
     open fun setUpListeners() {}
     open fun setUpView() {}
 
+    fun hideError() {
+        val fragment = supportFragmentManager.findFragmentByTag(ErrorDialog.ERROR_DIALOG_TAG)
+        if (fragment is ErrorDialog) {
+            fragment.dismiss()
+        }
+    }
+
     fun hideProgressDialog() {
         if (progressDialog.isShowing && loadingRaw != null) {
             animation.cancelAnimation()
             progressDialog.dismiss()
+        }
+    }
+
+    fun showError(
+        title: String,
+        message: String,
+        buttonText: String,
+        onButtonClicked: () -> Unit,
+    ) {
+        val dialogFragment = ErrorDialog(
+            title = title,
+            message = message,
+            buttonText = buttonText,
+            onButtonClicked = onButtonClicked
+        )
+        dialogFragment.isCancelable = false
+        supportFragmentManager.let { fragment ->
+            dialogFragment.show(fragment, ErrorDialog.ERROR_DIALOG_TAG)
         }
     }
 
