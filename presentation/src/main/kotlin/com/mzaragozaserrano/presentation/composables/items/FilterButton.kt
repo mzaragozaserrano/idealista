@@ -1,6 +1,7 @@
 package com.mzaragozaserrano.presentation.composables.items
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.offset
@@ -25,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.DpOffset
@@ -37,7 +39,7 @@ import com.mzs.core.presentation.utils.generic.emptyText
 @Composable
 fun FilterButton(filterSelected: Filter? = null, onOptionClicked: (Filter) -> Unit) {
     val list = listOf(Filter.All, Filter.Rent(), Filter.Sale())
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(value = false) }
     val rotation by animateFloatAsState(
         targetValue = if (expanded) {
             90f
@@ -46,12 +48,22 @@ fun FilterButton(filterSelected: Filter? = null, onOptionClicked: (Filter) -> Un
         },
         label = emptyText
     )
+    val scale by animateFloatAsState(
+        targetValue = if (expanded) 1f else 0.8f,
+        animationSpec = tween(300)
+    )
+    val alpha by animateFloatAsState(
+        targetValue = if (expanded) 1f else 0f,
+        animationSpec = tween(300)
+    )
     var optionSelected by remember { mutableStateOf(filterSelected ?: list.first()) }
 
     Box {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             DropdownMenu(
-                modifier = Modifier.width(width = 256.dp),
+                modifier = Modifier
+                    .width(width = 256.dp)
+                    .graphicsLayer(scaleX = scale, scaleY = scale, alpha = alpha),
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 expanded = expanded,
                 offset = DpOffset(x = 96.dp, y = 64.dp),
@@ -114,5 +126,5 @@ fun FilterButton(filterSelected: Filter? = null, onOptionClicked: (Filter) -> Un
 @PreviewLightDark
 @Composable
 private fun FilterButtonPrev() {
-    FilterButton {  }
+    FilterButton { }
 }
