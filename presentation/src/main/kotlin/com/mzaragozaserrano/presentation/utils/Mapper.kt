@@ -2,20 +2,22 @@ package com.mzaragozaserrano.presentation.utils
 
 import com.mzaragozaserrano.domain.bo.AdBO
 import com.mzaragozaserrano.domain.bo.DetailedAdBO
+import com.mzaragozaserrano.domain.bo.EnergyCertificationBO
 import com.mzaragozaserrano.domain.bo.ErrorBO
 import com.mzaragozaserrano.domain.bo.FeaturesBO
+import com.mzaragozaserrano.domain.bo.MoreCharacteristicsBO
 import com.mzaragozaserrano.domain.bo.ParkingSpaceBO
 import com.mzaragozaserrano.domain.bo.PriceBO
 import com.mzaragozaserrano.domain.bo.PriceInfoBO
 import com.mzaragozaserrano.domain.utils.DomainStringResource
-import com.mzaragozaserrano.presentation.R
 import com.mzaragozaserrano.presentation.vo.AdType
 import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.DetailedAdVO
 import com.mzaragozaserrano.presentation.vo.ErrorVO
 import com.mzaragozaserrano.presentation.vo.Feature
-import com.mzaragozaserrano.presentation.vo.Filter
 import com.mzaragozaserrano.presentation.vo.Info
+import com.mzaragozaserrano.presentation.vo.MoreInfo
+import com.mzs.core.domain.utils.extensions.safeLet
 import com.mzs.core.domain.utils.generic.DateUtils
 import com.mzs.core.domain.utils.generic.ddMMyyyy
 import com.mzs.core.presentation.components.compose.utils.toSkeletonable
@@ -71,7 +73,7 @@ private fun createExtraInfoList(
 ): List<Info> {
     val list = mutableListOf<Info>()
     when {
-        floor != null && exterior != null -> {
+        exterior != null && floor != null -> {
             list.add(element = Info.Floor(value = floor, secondValue = exterior))
         }
 
@@ -249,24 +251,34 @@ fun DetailedAdBO.transform(): DetailedAdVO = DetailedAdVO(
     description = propertyComment.orEmpty().toSkeletonable(),
     latitude = ubication?.latitude,
     longitude = ubication?.longitude,
-//    moreCharacteristics = moreCharacteristics,
+    moreInfo = moreCharacteristics?.transform(energyCertification = energyCertification),
     multimedia = multimedia?.images?.map { it.url.orEmpty() }.orEmpty(),
-    tags = listOf(),
     titleId = PresentationStringResource.TitleDescription.textId.toSkeletonable()
 )
 
-fun Int?.transform(): Filter {
-    return when (this) {
-        R.string.type_rent -> {
-            Filter.Rent()
-        }
-
-        R.string.type_sale -> {
-            Filter.Sale()
-        }
-
-        else -> {
-            Filter.All
-        }
+fun MoreCharacteristicsBO.transform(energyCertification: EnergyCertificationBO?): List<MoreInfo> {
+    val list = mutableListOf<MoreInfo>()
+    constructedArea?.let { constructedAreaAux ->
+        list.add(MoreInfo.Generic.ConstructedArea(value = constructedAreaAux.toString()))
     }
+    roomNumber?.let { roomNumberAux ->
+        list.add(MoreInfo.Generic.Rooms(value = roomNumberAux))
+    }
+    bathNumber?.let { bathNumberAux ->
+        list.add(MoreInfo.Generic.Bathroom(value = bathNumberAux))
+    }
+    status?.let { statusAux ->
+        list.add(MoreInfo.Generic.Status(value = statusAux))
+    }
+    safeLet(floor, exterior) { floorAux, exteriorAux ->
+        list.add(MoreInfo.Building.Floor(exterior = exteriorAux, floor = floorAux))
+    }
+    list.add(MoreInfo.Building.Lift(value = lift))
+    energyCertification?.energyConsumption?.type?.let { consume ->
+        list.add(MoreInfo.EnergyCertification.Consume(value = consume.uppercase()))
+    }
+    energyCertification?.emissions?.type?.let { emission ->
+        list.add(MoreInfo.EnergyCertification.Emission(value = emission.uppercase()))
+    }
+    return list
 }

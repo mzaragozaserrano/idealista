@@ -29,11 +29,12 @@ import com.mzaragozaserrano.domain.bo.MultimediaDetailBO
 import com.mzaragozaserrano.domain.bo.ParkingSpaceBO
 import com.mzaragozaserrano.domain.bo.PriceBO
 import com.mzaragozaserrano.domain.bo.PriceInfoBO
-import com.mzaragozaserrano.domain.utils.DomainStringResource
 import com.mzaragozaserrano.domain.bo.UbicationBO
+import com.mzaragozaserrano.domain.utils.DomainStringResource
 import com.mzs.core.data.datasources.local.ResourcesDataSource
 import com.mzs.core.domain.utils.generic.DateUtils
 import com.mzs.core.domain.utils.generic.ddMMyyyy_HHmm
+import com.mzs.core.presentation.utils.extensions.capitalize
 
 fun List<AdDTO>.transform(resourcesDataSource: ResourcesDataSource): List<AdBO> =
     map { it.transform(resourcesDataSource = resourcesDataSource) }
@@ -102,13 +103,13 @@ private fun ParkingSpaceDTO.transform(): ParkingSpaceBO = ParkingSpaceBO(
 
 private fun PriceInfoDTO.transform(): PriceInfoBO = PriceInfoBO(price = price?.transform())
 
-fun DetailedAdDTO.transform(): DetailedAdBO = DetailedAdBO(
+fun DetailedAdDTO.transform(resourcesDataSource: ResourcesDataSource): DetailedAdBO = DetailedAdBO(
     adid = adid,
     country = country,
     energyCertification = energyCertification?.transform(),
     extendedPropertyType = extendedPropertyType,
     homeType = homeType,
-    moreCharacteristics = moreCharacteristics?.transform(),
+    moreCharacteristics = moreCharacteristics?.transform(resourcesDataSource = resourcesDataSource),
     multimedia = multimedia?.transform(),
     operation = operation,
     price = price,
@@ -127,23 +128,31 @@ private fun EnergyCertificationDTO.transform(): EnergyCertificationBO = EnergyCe
 
 private fun EnergyTypeDTO.transform(): EnergyTypeBO = EnergyTypeBO(type = type)
 
-private fun MoreCharacteristicsDTO.transform(): MoreCharacteristicsBO = MoreCharacteristicsBO(
-    agencyIsABank = agencyIsABank,
-    bathNumber = bathNumber,
-    boxroom = boxroom,
-    communityCosts = communityCosts,
-    constructedArea = constructedArea,
-    energyCertificationType = energyCertificationType,
-    exterior = exterior,
-    flatLocation = flatLocation,
-    floor = floor,
-    housingFurnitures = housingFurnitures,
-    isDuplex = isDuplex,
-    lift = lift,
-    modificationDate = modificationDate,
-    roomNumber = roomNumber,
-    status = status
-)
+private fun MoreCharacteristicsDTO.transform(resourcesDataSource: ResourcesDataSource): MoreCharacteristicsBO =
+    MoreCharacteristicsBO(
+        agencyIsABank = agencyIsABank,
+        bathNumber = bathNumber,
+        boxroom = boxroom,
+        communityCosts = communityCosts,
+        constructedArea = constructedArea,
+        energyCertificationType = energyCertificationType,
+        exterior = exterior.transform(resourcesDataSource = resourcesDataSource),
+        flatLocation = flatLocation,
+        floor = floor,
+        housingFurnitures = housingFurnitures,
+        isDuplex = isDuplex,
+        lift = lift.transformToLift(resourcesDataSource = resourcesDataSource),
+        modificationDate = modificationDate,
+        roomNumber = roomNumber,
+        status = status?.capitalize()
+    )
+
+private fun Boolean.transformToLift(resourcesDataSource: ResourcesDataSource): String {
+    return when (this) {
+        true -> resourcesDataSource.getStringFromResource(DomainStringResource.Yes.textId)
+        false -> resourcesDataSource.getStringFromResource(DomainStringResource.No.textId)
+    }
+}
 
 private fun MultimediaDetailDTO.transform(): MultimediaDetailBO = MultimediaDetailBO(
     images = images?.map { it.transform() }

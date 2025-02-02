@@ -24,10 +24,27 @@
     //----- FILTER ----------/
     <string name="filter_all">Todos</string>
     //----- LABELS ----------/
+    <string name="community">%1$s comunidad</string>
+    <string name="consume">Consumo: %1$s</string>
+    <string name="emissions">Emisiones: %1$s</string>
     <string name="floor">Planta %1$s\u00B0 %2$s</string>
     <string name="rooms">%1$s hab.</string>
     <string name="square_meters">%1$s m\u00B2</string>
+    <string name="square_meters_expanded">%1$s m\u00B2 construidos</string>
     <string name="not_info_available">No hay información disponible</string>
+    //----- MORE INFO ----------/
+    <string name="title_building">Edificio</string>
+    <string name="title_energy_certification">Certificado energético</string>
+    <string name="title_generic">Características básicas</string>
+    //----- PLURALS ----------/
+    <plurals name="bathrooms">
+        <item quantity="one">%d baño</item>
+        <item quantity="other">%d baños</item>
+    </plurals>
+    <plurals name="rooms">
+        <item quantity="one">%d habitación</item>
+        <item quantity="other">%d habitaciones</item>
+    </plurals>
     //----- TOOLBAR ----------/
     <string name="favorites_home">Idealista</string>
     <string name="favorites_toolbar">Tus favoritos</string>

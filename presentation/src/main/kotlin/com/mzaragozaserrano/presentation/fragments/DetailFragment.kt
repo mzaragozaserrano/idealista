@@ -1,13 +1,17 @@
 package com.mzaragozaserrano.presentation.fragments
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -23,6 +27,7 @@ import com.mzaragozaserrano.presentation.theme.IdealistaAppTheme
 import com.mzaragozaserrano.presentation.viewmodels.DetailViewModel
 import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.DetailedAdVO
+import com.mzaragozaserrano.presentation.vo.MoreInfo
 import com.mzs.core.presentation.components.compose.images.LottieImage
 import com.mzs.core.presentation.utils.extensions.getSerializableArgument
 import com.mzs.core.presentation.utils.viewBinding.viewBinding
@@ -48,6 +53,11 @@ class DetailFragment :
         findNavController().popBackStack()
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.onCreate(ad = getSerializableArgument(BUNDLE_KEY, AdVO::class.java))
+    }
+
     override fun FragmentDetailBinding.setUpListeners() {
         binding.closeButton.apply {
             setOnClickListener {
@@ -69,6 +79,7 @@ class DetailFragment :
             uiState.error != null -> {
 
             }
+
             uiState.success != null -> {
                 setUpDetailedView(uiState.success.detailedAd)
                 setUpInitialView(uiState.success.ad)
@@ -140,12 +151,14 @@ class DetailFragment :
                     verticalArrangement = Arrangement.spacedBy(space = 4.dp),
                     content = {
                         TextSkeleton(
+                            height = 24.dp,
                             skeletonable = titleId,
                             textColor = MaterialTheme.colorScheme.onBackground,
                             textStyle = MaterialTheme.typography.titleLarge,
                             width = 128.dp
                         )
                         TextSkeleton(
+                            height = 16.dp,
                             skeletonable = description,
                             maxLines = 5,
                             textColor = MaterialTheme.colorScheme.onBackground,
@@ -173,16 +186,124 @@ class DetailFragment :
     }
 
     private fun DetailedAdVO.setUpTags() {
-        binding.composeTags.setContent {
-            IdealistaAppTheme {
+        if (moreInfo?.isNotEmpty() == true) {
+            checkCardsVisibility(moreInfo = moreInfo)
+            moreInfo.forEach { info ->
+                when (info) {
+                    is MoreInfo.Building.Floor -> {
+                        binding.buildingCard.contentInfo.addView(
+                            adInfo(text = getString(info.textId, info.floor, info.exterior))
+                        )
+                    }
 
+                    is MoreInfo.Building.Lift -> {
+                        binding.buildingCard.contentInfo.addView(adInfo(text = info.value))
+                    }
+
+                    is MoreInfo.EnergyCertification.Consume -> {
+                        binding.energyCertificationCard.contentInfo.addView(
+                            adInfo(
+                                text = getString(
+                                    info.textId,
+                                    info.value
+                                )
+                            )
+                        )
+                    }
+
+                    is MoreInfo.EnergyCertification.Emission -> {
+                        binding.energyCertificationCard.contentInfo.addView(
+                            adInfo(
+                                text = getString(
+                                    info.textId,
+                                    info.value
+                                )
+                            )
+                        )
+                    }
+
+                    is MoreInfo.Generic.Bathroom -> {
+                        binding.genericCard.contentInfo.addView(
+                            adInfo(
+                                text = resources.getQuantityString(
+                                    info.textId,
+                                    info.value,
+                                    info.value
+                                )
+                            )
+                        )
+                    }
+                    is MoreInfo.Generic.ConstructedArea -> {
+                        binding.genericCard.contentInfo.addView(
+                            adInfo(
+                                text = getString(
+                                    info.textId,
+                                    info.value
+                                )
+                            )
+                        )
+                    }
+                    is MoreInfo.Generic.Rooms -> {
+                        binding.genericCard.contentInfo.addView(
+                            adInfo(
+                                text = resources.getQuantityString(
+                                    info.textId,
+                                    info.value,
+                                    info.value
+                                )
+                            )
+                        )
+                    }
+                    is MoreInfo.Generic.Status -> {
+                        binding.genericCard.contentInfo.addView(adInfo(text = info.value))
+                    }
+                }
             }
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.onCreate(ad = getSerializableArgument(BUNDLE_KEY, AdVO::class.java))
+    private fun checkCardsVisibility(moreInfo: List<MoreInfo>) {
+        if (moreInfo.any { it is MoreInfo.Building }) {
+            val info = moreInfo.first { it is MoreInfo.Building } as MoreInfo.Building
+            binding.buildingCard.apply {
+                content.visibility = View.VISIBLE
+                infoIcon.setImageResource(info.iconId)
+                infoTitle.text = getString(info.labelId)
+            }
+        }
+        if (moreInfo.any { it is MoreInfo.EnergyCertification }) {
+            val info =
+                moreInfo.first { it is MoreInfo.EnergyCertification } as MoreInfo.EnergyCertification
+            binding.energyCertificationCard.apply {
+                content.visibility = View.VISIBLE
+                infoIcon.setImageResource(info.iconId)
+                infoTitle.text = getString(info.labelId)
+            }
+        }
+        if (moreInfo.any { it is MoreInfo.Generic }) {
+            val info =
+                moreInfo.first { it is MoreInfo.Generic } as MoreInfo.Generic
+            binding.genericCard.apply {
+                content.visibility = View.VISIBLE
+                infoIcon.setImageResource(info.iconId)
+                infoTitle.text = getString(info.labelId)
+            }
+        }
+    }
+
+    private fun adInfo(text: String): AppCompatTextView {
+        val textView = AppCompatTextView(requireContext()).apply {
+            ellipsize = TextUtils.TruncateAt.END
+            layoutParams = LinearLayoutCompat.LayoutParams(
+                LinearLayoutCompat.LayoutParams.MATCH_PARENT,
+                LinearLayoutCompat.LayoutParams.WRAP_CONTENT
+            )
+            maxLines = 1
+            setTextColor(ContextCompat.getColor(context, R.color.on_tertiary_container))
+            this.text = text
+            textSize = 16f
+        }
+        return textView
     }
 
 }

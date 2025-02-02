@@ -7,6 +7,6 @@ data class DetailedAdVO(
     val description: Skeletonable<String> = Skeletonable(),
     val latitude: Double? = null,
     val longitude: Double? = null,
+    val moreInfo: List<MoreInfo>? = null,
     val multimedia: List<String>? = null,
-    val tags: List<Info>? = null,
 )

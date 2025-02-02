@@ -26,7 +26,7 @@ fun DetailButtons(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(weight = 1f),
-            buttonBackgroundColor = MaterialTheme.colorScheme.inversePrimary,
+            buttonBackgroundColor = MaterialTheme.colorScheme.primary,
             text = stringResource(id = R.string.button_map),
             textColor = MaterialTheme.colorScheme.onPrimary,
             textStyle = MaterialTheme.typography.bodyLarge,
@@ -36,7 +36,7 @@ fun DetailButtons(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(weight = 1f),
-            buttonBackgroundColor = MaterialTheme.colorScheme.inversePrimary,
+            buttonBackgroundColor = MaterialTheme.colorScheme.primary,
             text = stringResource(
                 id = if (isFavorite) {
                     R.string.button_saved

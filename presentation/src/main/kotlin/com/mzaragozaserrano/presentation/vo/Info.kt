@@ -1,14 +1,15 @@
 package com.mzaragozaserrano.presentation.vo
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import com.mzaragozaserrano.presentation.R
+import java.io.Serializable
 
 sealed class Info(
     @DrawableRes val iconId: Int,
-    @StringRes val labelId: Int,
-    open val value: String,
-) {
+    val labelId: Int,
+    open val value: String = "",
+) : Serializable {
+
     data class Floor(override val value: String, val secondValue: String? = null) :
         Info(iconId = R.drawable.ic_floor, labelId = R.string.floor, value = value)
 

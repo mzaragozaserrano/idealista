@@ -26,14 +26,20 @@ class DetailViewModel(
 
     fun onCreate(ad: AdVO?) {
         if (ad != null) {
-            onUpdateUiState { copy(success = DetailVO(ad = ad)) }
+            onUpdateUiState { copy(success = DetailVO(ad = ad, initAd = ad)) }
         }
         onExecuteGetDetailedAd()
     }
 
+    fun getAd(): AdVO? = getViewModelState().success?.ad
+
     fun onCheckChanged(): Bundle {
         with(getViewModelState()) {
-            return bundleOf(DetailFragment.AD_CHANGED to success?.ad)
+            return if (success?.ad?.isFavorite != success?.initAd?.isFavorite) {
+                bundleOf(DetailFragment.AD_CHANGED to success?.ad)
+            } else {
+                bundleOf(DetailFragment.AD_CHANGED to null)
+            }
         }
     }
 
@@ -83,6 +89,10 @@ class DetailViewModel(
         }
     }
 
-    data class DetailVO(val ad: AdVO, val detailedAd: DetailedAdVO = DetailedAdVO())
+    data class DetailVO(
+        val ad: AdVO,
+        val initAd: AdVO,
+        val detailedAd: DetailedAdVO = DetailedAdVO(),
+    )
 
 }

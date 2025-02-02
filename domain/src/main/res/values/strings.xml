@@ -3,4 +3,6 @@
     <string name="exterior">exterior</string>
     <string name="type_flat">Piso en %1$s</string>
     <string name="interior">interior</string>
+    <string name="no">Sin ascensor</string>
+    <string name="yes">Tiene ascensor</string>
 </resources>

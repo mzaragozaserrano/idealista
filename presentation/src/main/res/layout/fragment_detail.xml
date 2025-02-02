@@ -42,11 +42,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/compose_multimedia">
 
-        <androidx.compose.ui.platform.ComposeView
-            android:id="@+id/compose_buttons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -55,6 +50,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/compose_buttons"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/text_view_title"
@@ -94,13 +94,19 @@
                     android:id="@+id/compose_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp" />
+                    android:layout_marginVertical="12dp" />
 
-                <androidx.compose.ui.platform.ComposeView
-                    android:id="@+id/compose_tags"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp" />
+                <include
+                    android:id="@+id/generic_card"
+                    layout="@layout/item_detailed_info_card"/>
+
+                <include
+                    android:id="@+id/building_card"
+                    layout="@layout/item_detailed_info_card"/>
+
+                <include
+                    android:id="@+id/energy_certification_card"
+                    layout="@layout/item_detailed_info_card"/>
 
             </LinearLayout>
 

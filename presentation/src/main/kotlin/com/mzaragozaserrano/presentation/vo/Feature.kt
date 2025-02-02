@@ -2,8 +2,9 @@ package com.mzaragozaserrano.presentation.vo
 
 import androidx.annotation.DrawableRes
 import com.mzaragozaserrano.presentation.R
+import java.io.Serializable
 
-sealed class Feature(@DrawableRes val iconId: Int, val id: Int) {
+sealed class Feature(@DrawableRes val iconId: Int, val id: Int): Serializable {
     data object AirConditioning : Feature(iconId = R.drawable.ic_air_conditioning, id = 1)
     data object BoxRoom : Feature(iconId = R.drawable.ic_box_room, id = 2)
     data object Garden : Feature(iconId = R.drawable.ic_gargen, id = 3)
