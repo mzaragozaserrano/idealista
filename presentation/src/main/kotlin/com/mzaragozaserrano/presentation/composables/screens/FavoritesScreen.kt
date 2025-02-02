@@ -1,12 +1,18 @@
 package com.mzaragozaserrano.presentation.composables.screens
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mzaragozaserrano.presentation.R
@@ -16,6 +22,7 @@ import com.mzaragozaserrano.presentation.composables.items.ProgressDialog
 import com.mzaragozaserrano.presentation.viewmodels.FavoritesViewModel
 import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.Filter
+import com.mzs.core.presentation.components.compose.images.LottieImage
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -39,7 +46,7 @@ fun FavoritesScreen(
     LaunchedEffect(
         key1 = adChanged,
         block = {
-            if(adChanged != null) {
+            if (adChanged != null) {
                 viewModel.onExecuteGetAllFavorites(optionSelected = optionSelected)
             }
         }
@@ -67,13 +74,35 @@ fun FavoritesScreen(
         ProgressDialog()
     }
     uiState.success?.let { success ->
-        FavoritesAdsList(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(vertical = 16.dp),
-            ads = success.currentAds,
-            onCardClicked = onCardClicked
-        )
+        if (success.currentAds.isEmpty()) {
+            Column(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(vertical = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(
+                    space = 16.dp,
+                    alignment = Alignment.CenterVertically
+                ),
+                content = {
+                    LottieImage(animationId = R.raw.image_loading)
+                    Text(
+                        color = MaterialTheme.colorScheme.onBackground,
+                        style = MaterialTheme.typography.headlineMedium,
+                        text = "Agrega tu primer favorito para poder ver algo aquí",
+                        textAlign = TextAlign.Center
+                    )
+                }
+            )
+        } else {
+            FavoritesAdsList(
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(vertical = 16.dp),
+                ads = success.currentAds,
+                onCardClicked = onCardClicked
+            )
+        }
     }
 
 }
