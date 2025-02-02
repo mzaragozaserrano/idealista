@@ -39,9 +39,6 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":domain"))
 
-    //----- ANDROIDX ----------/
-    implementation(libs.androidx.paging.runtime)
-
     //-----  GSON ----------/
     implementation(libs.gson)
 

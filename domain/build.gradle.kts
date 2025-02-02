@@ -37,9 +37,6 @@ dependencies {
     //----- MODULES ----------/
     implementation(project(":core"))
 
-    //----- ANDROIDX ----------/
-    implementation(libs.androidx.paging.runtime)
-
     //----- KOIN ----------/
     implementation(libs.koin.android)
 
