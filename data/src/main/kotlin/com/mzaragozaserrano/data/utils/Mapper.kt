@@ -29,7 +29,7 @@ import com.mzaragozaserrano.domain.bo.MultimediaDetailBO
 import com.mzaragozaserrano.domain.bo.ParkingSpaceBO
 import com.mzaragozaserrano.domain.bo.PriceBO
 import com.mzaragozaserrano.domain.bo.PriceInfoBO
-import com.mzaragozaserrano.domain.bo.StringResource
+import com.mzaragozaserrano.domain.utils.DomainStringResource
 import com.mzaragozaserrano.domain.bo.UbicationBO
 import com.mzs.core.data.datasources.local.ResourcesDataSource
 import com.mzs.core.domain.utils.generic.DateUtils
@@ -67,16 +67,16 @@ fun AdDTO.transform(resourcesDataSource: ResourcesDataSource): AdBO = AdBO(
 
 private fun Boolean?.transform(resourcesDataSource: ResourcesDataSource): String? {
     return when (this) {
-        true -> resourcesDataSource.getStringFromResource(StringResource.Exterior.textId)
-        false -> resourcesDataSource.getStringFromResource(StringResource.Interior.textId)
+        true -> resourcesDataSource.getStringFromResource(DomainStringResource.Exterior.textId)
+        false -> resourcesDataSource.getStringFromResource(DomainStringResource.Interior.textId)
         null -> null
     }
 }
 
 private fun String?.transformToAdBoolean(resourcesDataSource: ResourcesDataSource): Boolean? {
     return when (this) {
-        resourcesDataSource.getStringFromResource(StringResource.Exterior.textId) -> true
-        resourcesDataSource.getStringFromResource(StringResource.Interior.textId) -> false
+        resourcesDataSource.getStringFromResource(DomainStringResource.Exterior.textId) -> true
+        resourcesDataSource.getStringFromResource(DomainStringResource.Interior.textId) -> false
         else -> null
     }
 }

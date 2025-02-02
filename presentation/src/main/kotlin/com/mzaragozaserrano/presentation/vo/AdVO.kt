@@ -1,6 +1,6 @@
 package com.mzaragozaserrano.presentation.vo
 
-import com.mzaragozaserrano.domain.bo.StringResource
+import com.mzaragozaserrano.domain.utils.DomainStringResource
 import java.io.Serializable
 
 data class AdVO(
@@ -11,7 +11,7 @@ data class AdVO(
     val hasNotInformation: Boolean,
     val id: String,
     var isFavorite: Boolean,
-    val prefixTitle: StringResource?,
+    val prefixTitle: DomainStringResource?,
     val price: String,
     val subtitle: String,
     val thumbnail: String,

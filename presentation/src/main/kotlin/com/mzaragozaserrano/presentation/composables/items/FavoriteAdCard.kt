@@ -37,7 +37,7 @@ import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzs.core.presentation.utils.generic.emptyText
 
 @Composable
-fun FavoriteAdCard(ad: AdVO, onCardClicked: () -> Unit) {
+fun FavoriteAdCard(ad: AdVO, onCardClicked: (AdVO) -> Unit) {
 
     var isPressed by remember { mutableStateOf(value = false) }
 
@@ -47,7 +47,7 @@ fun FavoriteAdCard(ad: AdVO, onCardClicked: () -> Unit) {
             .clip(shape = RoundedCornerShape(size = 20.dp))
             .clickable {
                 isPressed = isPressed.not()
-                onCardClicked()
+                onCardClicked(ad)
             },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         content = {

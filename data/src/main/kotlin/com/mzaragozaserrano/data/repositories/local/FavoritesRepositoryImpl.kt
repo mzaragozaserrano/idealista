@@ -32,7 +32,10 @@ class FavoritesRepositoryImpl(
     }
 
     override fun removeFavorite(ad: AdBO): Boolean {
-        favoritesDataSource.removeFavorite(ad = ad.transform(resourcesDataSource = resourcesDataSource))
+        val adAux = favoritesDataSource.getAdById(propertyCode = ad.propertyCode.orEmpty())
+        if (adAux != null) {
+            favoritesDataSource.removeFavorite(ad = adAux)
+        }
         return true
     }
 

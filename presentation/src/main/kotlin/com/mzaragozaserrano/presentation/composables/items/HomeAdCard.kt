@@ -61,15 +61,15 @@ import com.mzs.core.presentation.utils.generic.emptyText
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
 fun HomeAdCard(
+    modifier: Modifier,
+    ad: AdVO,
     page: Int,
     state: PagerState,
-    onCardClicked: () -> Unit,
-    ads: List<AdVO>,
-    modifier: Modifier,
+    onCardClicked: (AdVO) -> Unit,
     onFavoriteClicked: (String, Boolean) -> Unit,
 ) {
 
-    var isFavorite by remember(ads[page].id) { mutableStateOf(value = ads[page].isFavorite) }
+    var isFavorite by remember(ad.id) { mutableStateOf(value = ad.isFavorite) }
     var isPressed by remember { mutableStateOf(value = false) }
 
     val startOffset =
@@ -105,20 +105,23 @@ fun HomeAdCard(
 
     val shakeAnimation = remember { Animatable(initialValue = 0f) }
 
-    LaunchedEffect(key1 = isFavorite) {
-        if (isPressed && isFavorite.not()) {
-            repeat(times = 6) {
-                shakeAnimation.animateTo(
-                    animationSpec = tween(durationMillis = 50, easing = LinearEasing),
-                    targetValue = if (it % 2 == 0) 10f else -10f
-                )
-            }
-            shakeAnimation.animateTo(targetValue = 0f)
-            if (shakeAnimation.isRunning.not()) {
-                isPressed = false
+    LaunchedEffect(
+        key1 = isFavorite,
+        block = {
+            if (isPressed && isFavorite.not()) {
+                repeat(times = 6) {
+                    shakeAnimation.animateTo(
+                        animationSpec = tween(durationMillis = 50, easing = LinearEasing),
+                        targetValue = if (it % 2 == 0) 10f else -10f
+                    )
+                }
+                shakeAnimation.animateTo(targetValue = 0f)
+                if (shakeAnimation.isRunning.not()) {
+                    isPressed = false
+                }
             }
         }
-    }
+    )
 
     Card(
         modifier = Modifier
@@ -137,21 +140,21 @@ fun HomeAdCard(
             }
             .clip(shape = RoundedCornerShape(size = 20.dp))
             .offset(x = shakeAnimation.value.dp, y = 0.dp)
-            .clickable { onCardClicked() },
+            .clickable { onCardClicked(ad) },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         content = {
             UrlImage(
                 modifier = Modifier.weight(weight = 1f),
                 animationId = R.raw.image_loading,
                 contentScale = ContentScale.Crop,
-                url = ads[page].thumbnail
+                url = ad.thumbnail
             )
             LazyColumn(
                 modifier = Modifier.padding(all = 16.dp),
                 userScrollEnabled = false,
                 verticalArrangement = Arrangement.spacedBy(space = 4.dp),
                 content = {
-                    if (ads[page].features.isNotEmpty()) {
+                    if (ad.features.isNotEmpty()) {
                         item {
                             Adapter(
                                 modifier = Modifier.padding(vertical = 2.dp),
@@ -159,7 +162,7 @@ fun HomeAdCard(
                                 contentPadding = 0.dp,
                                 isScrollable = false,
                                 itemOrientation = ItemOrientation.Horizontal,
-                                items = ads[page].features,
+                                items = ad.features,
                                 item = { _, item ->
                                     ResourceImage(
                                         iconId = item.iconId,
@@ -171,38 +174,38 @@ fun HomeAdCard(
                             )
                         }
                     }
-                    ads[page].prefixTitle?.let { prefix ->
-                        if (ads[page].title.isNotEmpty()) {
+                    ad.prefixTitle?.let { prefix ->
+                        if (ad.title.isNotEmpty()) {
                             item {
                                 Text(
                                     color = MaterialTheme.colorScheme.onSurface,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis,
-                                    text = stringResource(id = prefix.textId, ads[page].title),
+                                    text = stringResource(id = prefix.textId, ad.title),
                                     style = MaterialTheme.typography.bodySmall
                                 )
                             }
                         }
                     }
-                    if (ads[page].title.isNotEmpty()) {
+                    if (ad.title.isNotEmpty()) {
                         item {
                             Text(
                                 color = MaterialTheme.colorScheme.onSurface,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                text = ads[page].subtitle,
+                                text = ad.subtitle,
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
                     }
-                    if (ads[page].price.isNotEmpty()) {
+                    if (ad.price.isNotEmpty()) {
                         item {
                             Text(
                                 modifier = Modifier.padding(vertical = 2.dp),
                                 color = MaterialTheme.colorScheme.onSurface,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                text = ads[page].price + ads[page].currencySuffix,
+                                text = ad.price + ad.currencySuffix,
                                 style = MaterialTheme.typography.headlineMedium
                             )
                         }
@@ -215,7 +218,7 @@ fun HomeAdCard(
                             ),
                             verticalAlignment = Alignment.Bottom
                         ) {
-                            if (ads[page].extraInfo.isNotEmpty()) {
+                            if (ad.extraInfo.isNotEmpty()) {
                                 FlowRow(
                                     modifier = modifier.weight(weight = 1f),
                                     horizontalArrangement = Arrangement.spacedBy(
@@ -227,7 +230,7 @@ fun HomeAdCard(
                                         alignment = Alignment.CenterVertically
                                     ),
                                     content = {
-                                        ads[page].extraInfo.forEach { item ->
+                                        ad.extraInfo.forEach { item ->
                                             WavyLabel(
                                                 buttonBackgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
                                                 iconBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
@@ -252,7 +255,7 @@ fun HomeAdCard(
                                     }
                                 )
                             }
-                            if (ads[page].id.isNotEmpty()) {
+                            if (ad.id.isNotEmpty()) {
                                 Crossfade(
                                     animationSpec = spring(
                                         dampingRatio = Spring.DampingRatioNoBouncy,
@@ -265,7 +268,7 @@ fun HomeAdCard(
                                                 .size(size = if (isPressed) sizeAnimation else 32.dp)
                                                 .clip(shape = CircleShape)
                                                 .clickable {
-                                                    onFavoriteClicked(ads[page].id, isFavorite)
+                                                    onFavoriteClicked(ad.id, isFavorite)
                                                     isFavorite = isFavorite.not()
                                                     isPressed = isPressed.not()
                                                 }
@@ -287,7 +290,7 @@ fun HomeAdCard(
                             }
                         }
                     }
-                    if (ads[page].hasNotInformation) {
+                    if (ad.hasNotInformation) {
                         item {
                             Text(
                                 modifier = Modifier.padding(vertical = 2.dp),

@@ -14,6 +14,9 @@ interface FavoritesDataSource {
     @Query("SELECT * FROM favorite_table")
     fun getAllFavorites(): List<AdDTO>
 
+    @Query("SELECT * FROM favorite_table WHERE propertyCode = :propertyCode")
+    fun getAdById(propertyCode: String): AdDTO?
+
     @Delete
     fun removeFavorite(ad: AdDTO)
 }

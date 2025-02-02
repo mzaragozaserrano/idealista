@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.mzaragozaserrano.presentation.composables.screens.FavoritesScreen
 import com.mzaragozaserrano.presentation.composables.screens.HomeScreen
+import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.Filter
 import com.mzs.core.presentation.navigation.screenNavigation
 import kotlinx.serialization.Serializable
@@ -13,10 +14,10 @@ import kotlinx.serialization.Serializable
 @Composable
 fun Navigation(
     modifier: Modifier = Modifier,
+    adChanged: AdVO?,
     startDestination: Any,
     optionSelected: Filter?,
-    onCardClicked: () -> Unit,
-    onPagedChanged: (Int) -> Unit,
+    onCardClicked: (AdVO) -> Unit,
 ) {
 
     val navController = rememberNavController()
@@ -27,13 +28,17 @@ fun Navigation(
         startDestination = startDestination
     ) {
         screenNavigation<Favorites> {
-            FavoritesScreen(optionSelected = optionSelected, onCardClicked = onCardClicked)
+            FavoritesScreen(
+                adChanged = adChanged,
+                optionSelected = optionSelected,
+                onCardClicked = onCardClicked
+            )
         }
         screenNavigation<Home> {
             HomeScreen(
+                adChanged = adChanged,
                 optionSelected = optionSelected,
-                onCardClicked = onCardClicked,
-                onPageChanged = onPagedChanged
+                onCardClicked = onCardClicked
             )
         }
     }

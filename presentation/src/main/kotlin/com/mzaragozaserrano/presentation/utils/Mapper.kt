@@ -7,15 +7,18 @@ import com.mzaragozaserrano.domain.bo.FeaturesBO
 import com.mzaragozaserrano.domain.bo.ParkingSpaceBO
 import com.mzaragozaserrano.domain.bo.PriceBO
 import com.mzaragozaserrano.domain.bo.PriceInfoBO
-import com.mzaragozaserrano.domain.bo.StringResource
+import com.mzaragozaserrano.domain.utils.DomainStringResource
+import com.mzaragozaserrano.presentation.R
 import com.mzaragozaserrano.presentation.vo.AdType
 import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.DetailedAdVO
 import com.mzaragozaserrano.presentation.vo.ErrorVO
 import com.mzaragozaserrano.presentation.vo.Feature
+import com.mzaragozaserrano.presentation.vo.Filter
 import com.mzaragozaserrano.presentation.vo.Info
 import com.mzs.core.domain.utils.generic.DateUtils
 import com.mzs.core.domain.utils.generic.ddMMyyyy
+import com.mzs.core.presentation.components.compose.utils.toSkeletonable
 import com.mzs.core.presentation.utils.extensions.capitalize
 import com.mzs.core.presentation.utils.generic.emptyText
 import java.text.DecimalFormat
@@ -32,7 +35,7 @@ fun ErrorBO.transform(): ErrorVO = when (this) {
 
 fun List<AdBO>.transform(): List<AdVO> = map { it.transform() }
 
-fun AdBO.transform(): AdVO {
+fun AdBO.transform(isFavorite: Boolean? = null): AdVO {
     val extraInfo =
         createExtraInfoList(exterior = exterior, floor = floor, rooms = rooms, size = size)
     val features = features.transform(hasParking = parkingSpace?.hasParkingSpace ?: false)
@@ -49,7 +52,7 @@ fun AdBO.transform(): AdVO {
         extraInfo = extraInfo,
         hasNotInformation = extraInfo.isEmpty() && features.isEmpty() && price.isEmpty() && subtitle.isEmpty() && title.isEmpty(),
         id = propertyCode.orEmpty(),
-        isFavorite = isFavorite,
+        isFavorite = isFavorite ?: this.isFavorite,
         features = features,
         prefixTitle = propertyType.transformToStringResource(),
         price = price,
@@ -95,9 +98,9 @@ fun FeaturesBO?.transform(hasParking: Boolean): List<Feature> {
     return features
 }
 
-private fun String?.transformToStringResource(): StringResource? {
+private fun String?.transformToStringResource(): DomainStringResource? {
     return when (this) {
-        "flat" -> StringResource.Flat
+        "flat" -> DomainStringResource.Flat
         else -> null
     }
 }
@@ -195,6 +198,7 @@ fun AdVO.transform(): AdBO {
     val (province, district, municipality) = subtitle.getLocation()
     return AdBO(
         address = title.lowercase(),
+        date = date,
         district = district,
         exterior = exterior,
         features = FeaturesBO(
@@ -219,8 +223,8 @@ fun AdVO.transform(): AdBO {
     )
 }
 
-private fun StringResource?.transform(): String? {
-    return if (this is StringResource.Flat) "flat" else null
+private fun DomainStringResource?.transform(): String? {
+    return if (this is DomainStringResource.Flat) "flat" else null
 }
 
 
@@ -242,9 +246,27 @@ fun List<AdVO>.transform(dateUtils: DateUtils) = groupBy { ad ->
 }.toList().reversed().toMap()
 
 fun DetailedAdBO.transform(): DetailedAdVO = DetailedAdVO(
-    energyCertification,
-    moreCharacteristics,
-    multimedia,
-    propertyComment,
-    ubication
+    description = propertyComment.orEmpty().toSkeletonable(),
+    latitude = ubication?.latitude,
+    longitude = ubication?.longitude,
+//    moreCharacteristics = moreCharacteristics,
+    multimedia = multimedia?.images?.map { it.url.orEmpty() }.orEmpty(),
+    tags = listOf(),
+    titleId = PresentationStringResource.TitleDescription.textId.toSkeletonable()
 )
+
+fun Int?.transform(): Filter {
+    return when (this) {
+        R.string.type_rent -> {
+            Filter.Rent()
+        }
+
+        R.string.type_sale -> {
+            Filter.Sale()
+        }
+
+        else -> {
+            Filter.All
+        }
+    }
+}

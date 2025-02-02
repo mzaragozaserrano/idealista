@@ -4,7 +4,12 @@
     <string name="bottom_item_favorite">Favoritos</string>
     <string name="bottom_item_home">Home</string>
     //----- BUTTONS ----------/
-    <string name="retry_button">Reintentar</string>
+    <string name="button_map">Ver mapa</string>
+    <string name="button_retry">Reintentar</string>
+    <string name="button_not_saved">Guardar</string>
+    <string name="button_saved">Guardado</string>
+    //----- DETAIL ----------/
+    <string name="title_description">Comentario del anunciante</string>
     //----- DIALOG ----------/
     <string name="title_error">Error</string>
     //----- ERRORS ----------/

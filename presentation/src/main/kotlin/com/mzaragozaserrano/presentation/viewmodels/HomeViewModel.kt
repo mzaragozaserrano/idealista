@@ -39,14 +39,15 @@ class HomeViewModel(
     private fun handleGetAllAdsResponse(optionSelected: Filter?, result: Result<List<AdBO>>) {
         when (result) {
             is Result.Loading -> {
-                onUpdateUiState { copy(error = null, loading = true) }
+                onUpdateUiState { copy(error = null, loading = true, success = null) }
             }
 
             is Result.Response.Error<*> -> {
                 onUpdateUiState {
                     copy(
                         error = (result.code as ErrorBO).transform(),
-                        loading = false
+                        loading = false,
+                        success = null
                     )
                 }
             }

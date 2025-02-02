@@ -66,6 +66,9 @@ dependencies {
     //----- KOTLINX ----------/
     implementation(libs.kotlinx.serialization.json)
 
+    //----- LOTTIE ----------/
+    implementation(libs.lottie)
+
     //----- MATERIAL ----------/
     implementation(libs.material3)
 

@@ -1,14 +1,12 @@
 package com.mzaragozaserrano.presentation.vo
 
-import com.mzaragozaserrano.domain.bo.EnergyCertificationBO
-import com.mzaragozaserrano.domain.bo.MoreCharacteristicsBO
-import com.mzaragozaserrano.domain.bo.MultimediaDetailBO
-import com.mzaragozaserrano.domain.bo.UbicationBO
+import com.mzs.core.presentation.components.compose.utils.Skeletonable
 
 data class DetailedAdVO(
-    val energyCertification: EnergyCertificationBO?,
-    val moreCharacteristics: MoreCharacteristicsBO?,
-    val multimedia: MultimediaDetailBO?,
-    val propertyComment: String?,
-    val ubication: UbicationBO?,
+    val titleId: Skeletonable<Int> = Skeletonable(),
+    val description: Skeletonable<String> = Skeletonable(),
+    val latitude: Double? = null,
+    val longitude: Double? = null,
+    val multimedia: List<String>? = null,
+    val tags: List<Info>? = null,
 )

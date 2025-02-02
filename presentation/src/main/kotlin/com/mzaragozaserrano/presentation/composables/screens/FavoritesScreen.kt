@@ -14,32 +14,49 @@ import com.mzaragozaserrano.presentation.composables.items.ErrorDialog
 import com.mzaragozaserrano.presentation.composables.items.FavoritesAdsList
 import com.mzaragozaserrano.presentation.composables.items.ProgressDialog
 import com.mzaragozaserrano.presentation.viewmodels.FavoritesViewModel
+import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.Filter
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun FavoritesScreen(
     modifier: Modifier = Modifier,
+    adChanged: AdVO?,
     optionSelected: Filter?,
-    onCardClicked: () -> Unit,
+    onCardClicked: (AdVO) -> Unit,
     viewModel: FavoritesViewModel = koinViewModel(),
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.onCreate(optionSelected = optionSelected)
-    }
-
-    LaunchedEffect(key1 = optionSelected) {
-        if (optionSelected != uiState.success?.optionSelected && optionSelected != null) {
-            viewModel.onRefreshList(optionSelected = optionSelected)
+    LaunchedEffect(
+        key1 = Unit,
+        block = {
+            viewModel.onCreate(optionSelected = optionSelected)
         }
-    }
+    )
+
+    LaunchedEffect(
+        key1 = adChanged,
+        block = {
+            if(adChanged != null) {
+                viewModel.onExecuteGetAllFavorites(optionSelected = optionSelected)
+            }
+        }
+    )
+
+    LaunchedEffect(
+        key1 = optionSelected,
+        block = {
+            if (optionSelected != uiState.success?.optionSelected && optionSelected != null) {
+                viewModel.onRefreshList(optionSelected = optionSelected)
+            }
+        }
+    )
 
     uiState.error?.let { error ->
         ErrorDialog(
-            buttonText = stringResource(id = R.string.retry_button),
+            buttonText = stringResource(id = R.string.button_retry),
             messageText = stringResource(id = error.messageId),
             onButtonClicked = {
                 viewModel.onExecuteGetAllFavorites(optionSelected = optionSelected)

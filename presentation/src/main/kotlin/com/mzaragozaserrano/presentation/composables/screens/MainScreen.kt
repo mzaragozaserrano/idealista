@@ -16,53 +16,50 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mzaragozaserrano.presentation.R
 import com.mzaragozaserrano.presentation.composables.items.BottomNavigationBar
 import com.mzaragozaserrano.presentation.composables.items.FilterButton
-import com.mzaragozaserrano.presentation.composables.navigation.Favorites
 import com.mzaragozaserrano.presentation.composables.navigation.Home
 import com.mzaragozaserrano.presentation.composables.navigation.Navigation
-import com.mzaragozaserrano.presentation.vo.BottomItem
-import com.mzaragozaserrano.presentation.vo.Filter
+import com.mzaragozaserrano.presentation.viewmodels.MainViewModel
+import com.mzaragozaserrano.presentation.vo.AdVO
 import com.mzaragozaserrano.presentation.vo.createBottomItemsList
 import com.mzs.core.presentation.utils.generic.emptyText
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(onCardClicked: () -> Unit) {
+fun MainScreen(
+    adChanged: AdVO?,
+    viewModel: MainViewModel = koinViewModel(),
+    onCardClicked: (AdVO) -> Unit,
+) {
 
-    var destination by remember { mutableStateOf<Any>(value = Home) }
-    var optionSelected by remember { mutableStateOf<Filter?>(value = null) }
-    var showTopBar by remember { mutableStateOf(value = true) }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            BottomNavigationBar(
-                items = createBottomItemsList(),
-                onItemSelected = { item ->
-                    destination = when (item) {
-                        is BottomItem.Favorite -> {
-                            Favorites
-                        }
-
-                        is BottomItem.Home -> {
-                            Home
-                        }
+            uiState.success?.let { success ->
+                BottomNavigationBar(
+                    itemSelected = success.bottomItem,
+                    items = createBottomItemsList(),
+                    onItemSelected = { item ->
+                        viewModel.onSetDestination(item = item)
                     }
-                }
-            )
+                )
+            }
         },
         floatingActionButton = {
-            FilterButton(
-                filterSelected = null,
-                onOptionClicked = { option -> optionSelected = option }
-            )
+            uiState.success?.let { success ->
+                FilterButton(
+                    filterSelected = success.optionSelected,
+                    onOptionClicked = { option -> viewModel.onSetFilter(option = option) }
+                )
+            }
         },
         floatingActionButtonPosition = FabPosition.Center,
         topBar = {
@@ -70,7 +67,7 @@ fun MainScreen(onCardClicked: () -> Unit) {
                 colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
                 title = {
                     AnimatedContent(
-                        targetState = destination is Home,
+                        targetState = uiState.success?.destination is Home,
                         transitionSpec = {
                             if (targetState) {
                                 slideInVertically(initialOffsetY = { -it }) togetherWith slideOutVertically(
@@ -94,13 +91,15 @@ fun MainScreen(onCardClicked: () -> Unit) {
             )
         },
         content = { contentPadding ->
-            Navigation(
-                modifier = Modifier.padding(paddingValues = contentPadding),
-                startDestination = destination,
-                optionSelected = optionSelected,
-                onCardClicked = onCardClicked,
-                onPagedChanged = { showTopBar = it == 0 }
-            )
+            uiState.success?.let { success ->
+                Navigation(
+                    modifier = Modifier.padding(paddingValues = contentPadding),
+                    adChanged = adChanged,
+                    startDestination = success.destination,
+                    optionSelected = success.optionSelected,
+                    onCardClicked = onCardClicked
+                )
+            }
         }
     )
 

@@ -22,9 +22,9 @@ import com.mzaragozaserrano.presentation.vo.BottomItem
 import com.mzs.core.presentation.utils.generic.emptyText
 
 @Composable
-fun BottomNavigationBar(items: List<BottomItem>, onItemSelected: (BottomItem) -> Unit) {
+fun BottomNavigationBar(itemSelected: BottomItem, items: List<BottomItem>, onItemSelected: (BottomItem) -> Unit) {
 
-    var screenSelected by remember { mutableIntStateOf(value = 0) }
+    var screenSelected by remember { mutableIntStateOf(value = itemSelected.id) }
 
     NavigationBar(containerColor = MaterialTheme.colorScheme.surfaceContainer) {
         items.forEach { item ->

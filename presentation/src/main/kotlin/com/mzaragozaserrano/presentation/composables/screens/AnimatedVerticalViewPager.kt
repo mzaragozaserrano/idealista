@@ -13,20 +13,16 @@ import com.mzaragozaserrano.presentation.vo.AdVO
 fun AnimatedVerticalViewPager(
     modifier: Modifier,
     ads: List<AdVO>,
-    onCardClicked: () -> Unit,
+    onCardClicked: (AdVO) -> Unit,
     onFavoriteClicked: (String, Boolean) -> Unit,
-    onPageChanged: (Int) -> Unit,
 ) {
 
     val state = rememberPagerState(pageCount = { ads.size })
 
-    LaunchedEffect(state.currentPage) {
-        onPageChanged(state.currentPage)
-    }
-
     VerticalPager(
         modifier = modifier,
         beyondViewportPageCount = 1,
+        key = { ads[it].id },
         state = state,
         pageSpacing = 16.dp,
         pageContent = { page ->
@@ -34,7 +30,7 @@ fun AnimatedVerticalViewPager(
                 page = page,
                 state = state,
                 onCardClicked = onCardClicked,
-                ads = ads,
+                ad = ads[page],
                 modifier = modifier,
                 onFavoriteClicked = onFavoriteClicked,
             )

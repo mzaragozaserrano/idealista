@@ -24,7 +24,7 @@ class FavoritesViewModel(
     fun onExecuteGetAllFavorites(optionSelected: Filter?) {
         viewModelScope.launch {
             onUpdateUiState { copy(loading = true) }
-            val ads = getAllFavorites.invoke().map { it.transform() }
+            val ads = getAllFavorites.invoke().map { it.transform(isFavorite = true) }
             val filteredList = if (optionSelected is Type) {
                 ads.filter { ad ->
                     ad.type == (optionSelected as? Type)?.type

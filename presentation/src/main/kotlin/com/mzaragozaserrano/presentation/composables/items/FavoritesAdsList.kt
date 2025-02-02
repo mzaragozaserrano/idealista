@@ -19,7 +19,7 @@ import com.mzs.core.presentation.utils.generic.ItemOrientation
 fun FavoritesAdsList(
     modifier: Modifier = Modifier,
     ads: Map<String, List<AdVO>>,
-    onCardClicked: () -> Unit,
+    onCardClicked: (AdVO) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier,
