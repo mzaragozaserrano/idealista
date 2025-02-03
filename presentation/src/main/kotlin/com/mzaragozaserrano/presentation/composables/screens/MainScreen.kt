@@ -17,6 +17,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mzaragozaserrano.presentation.R
@@ -64,6 +65,7 @@ fun MainScreen(
         floatingActionButtonPosition = FabPosition.Center,
         topBar = {
             TopAppBar(
+                modifier = Modifier.testTag("HOLA"),
                 colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
                 title = {
                     AnimatedContent(

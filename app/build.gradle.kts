@@ -43,23 +43,25 @@ dependencies {
     implementation(project(":presentation"))
 
     //----- ANDROIDX ----------/
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
 
     //----- KOIN ----------/
     implementation(libs.koin.android)
 
+    //----- KOTLINX ----------/
+    implementation(libs.kotlinx.coroutines.android)
+
     //----- TESTING ----------/
-    androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.rules)
+    androidTestImplementation(libs.room.testing)
+    testImplementation(libs.androidx.test.core)
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockk)
+    testImplementation(libs.room.runtime)
+    testImplementation(libs.turbine)
 
 }
