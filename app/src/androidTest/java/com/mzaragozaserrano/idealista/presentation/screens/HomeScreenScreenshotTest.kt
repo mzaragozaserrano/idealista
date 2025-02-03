@@ -1,4 +1,4 @@
-package com.mzaragozaserrano.idealista.presentation.screenshots
+package com.mzaragozaserrano.idealista.presentation.screens
 
 import android.content.ContentUris
 import android.content.ContentValues
@@ -18,7 +18,6 @@ import androidx.test.espresso.action.ViewActions.captureToBitmap
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.mzaragozaserrano.presentation.activities.IdealistaActivity
 import junit.framework.TestCase.assertTrue
 import org.hamcrest.Matcher
@@ -32,7 +31,7 @@ import java.io.File
 import java.io.OutputStream
 
 @RunWith(AndroidJUnit4::class)
-class ScreenshotTest {
+class HomeScreenScreenshotTest {
 
     private lateinit var idlingResource: IdlingResource
 
