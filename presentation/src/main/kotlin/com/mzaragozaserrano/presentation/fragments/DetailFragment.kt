@@ -113,17 +113,19 @@ class DetailFragment :
 
             uiState.success != null -> {
                 hideError()
-                setUpDetailedView(uiState.success.detailedAd)
+                setUpDetailedView(uiState.success.detailedAd, uiState.success.isMoreInfoLoaded)
                 setUpInitialView(uiState.success.ad)
             }
         }
     }
 
-    private fun setUpDetailedView(detailedAd: DetailedAdVO) {
+    private fun setUpDetailedView(detailedAd: DetailedAdVO, isMoreInfoLoaded: Boolean) {
         with(detailedAd) {
             setUpDescription()
             setUpImagePager()
-            setUpTags()
+            if (isMoreInfoLoaded.not()) {
+                setUpMoreInfo()
+            }
         }
     }
 
@@ -232,24 +234,24 @@ class DetailFragment :
         }
     }
 
-    private fun DetailedAdVO.setUpTags() {
+    private fun DetailedAdVO.setUpMoreInfo() {
         if (moreInfo?.isNotEmpty() == true) {
             checkCardsVisibility(moreInfo = moreInfo)
             moreInfo.forEach { info ->
                 when (info) {
                     is MoreInfo.Building.Floor -> {
                         binding.buildingCard.contentInfo.addView(
-                            adInfo(text = getString(info.textId, info.floor, info.exterior))
+                            addInfo(text = getString(info.textId, info.floor, info.exterior))
                         )
                     }
 
                     is MoreInfo.Building.Lift -> {
-                        binding.buildingCard.contentInfo.addView(adInfo(text = info.value))
+                        binding.buildingCard.contentInfo.addView(addInfo(text = info.value))
                     }
 
                     is MoreInfo.EnergyCertification.Consume -> {
                         binding.energyCertificationCard.contentInfo.addView(
-                            adInfo(
+                            addInfo(
                                 text = getString(
                                     info.textId,
                                     info.value
@@ -260,7 +262,7 @@ class DetailFragment :
 
                     is MoreInfo.EnergyCertification.Emission -> {
                         binding.energyCertificationCard.contentInfo.addView(
-                            adInfo(
+                            addInfo(
                                 text = getString(
                                     info.textId,
                                     info.value
@@ -271,7 +273,7 @@ class DetailFragment :
 
                     is MoreInfo.Generic.Bathroom -> {
                         binding.genericCard.contentInfo.addView(
-                            adInfo(
+                            addInfo(
                                 text = resources.getQuantityString(
                                     info.textId,
                                     info.value,
@@ -283,7 +285,7 @@ class DetailFragment :
 
                     is MoreInfo.Generic.ConstructedArea -> {
                         binding.genericCard.contentInfo.addView(
-                            adInfo(
+                            addInfo(
                                 text = getString(
                                     info.textId,
                                     info.value
@@ -294,7 +296,7 @@ class DetailFragment :
 
                     is MoreInfo.Generic.Rooms -> {
                         binding.genericCard.contentInfo.addView(
-                            adInfo(
+                            addInfo(
                                 text = resources.getQuantityString(
                                     info.textId,
                                     info.value,
@@ -305,7 +307,7 @@ class DetailFragment :
                     }
 
                     is MoreInfo.Generic.Status -> {
-                        binding.genericCard.contentInfo.addView(adInfo(text = info.value))
+                        binding.genericCard.contentInfo.addView(addInfo(text = info.value))
                     }
                 }
             }
@@ -341,7 +343,7 @@ class DetailFragment :
         }
     }
 
-    private fun adInfo(text: String): AppCompatTextView {
+    private fun addInfo(text: String): AppCompatTextView {
         val textView = AppCompatTextView(requireContext()).apply {
             ellipsize = TextUtils.TruncateAt.END
             layoutParams = LinearLayoutCompat.LayoutParams(

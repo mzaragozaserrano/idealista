@@ -101,7 +101,12 @@ class DetailViewModel(
                     addFavoriteAd.invoke(params = AddFavoriteAdUseCaseImpl.Params(ad = ad.transform()))
                 }
                 onUpdateUiState {
-                    copy(success = success?.copy(ad = ad.copy(isFavorite = isFavorite.not())))
+                    copy(
+                        success = success?.copy(
+                            ad = ad.copy(isFavorite = isFavorite.not()),
+                            isMoreInfoLoaded = true
+                        )
+                    )
                 }
             }
         }
@@ -111,6 +116,7 @@ class DetailViewModel(
         val ad: AdVO,
         val initAd: AdVO,
         val detailedAd: DetailedAdVO = DetailedAdVO(),
+        val isMoreInfoLoaded: Boolean = false,
     )
 
     sealed class NavigationType : NavigationEvent {
