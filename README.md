@@ -45,7 +45,34 @@ La aplicación está organizada en módulos para garantizar una arquitectura lim
   - **Lottie** para animaciones.
   - **Gson** y **Moshi** para la serialización de datos.
   - **OkHttp3** para operaciones de red.
-  
+ 
+ ## Pantallas
+
+### MainFragment
+- *Scaffold* que da lugar a una TopBar y una BottomNavigation con dos opciones para cambiar entre Screens.
+- *FloatingActionButton* para el filtro.
+
+ ### HomeScreen
+ - *VerticalPager* para mostrar la lista de los anuncios donde aparece un resumen del anuncio.
+ - Botón para guardar o quitar un anuncio como favorito.
+ - Haciendo click en cada anuncio se navegaría al DetailFragment.
+
+### FavoritesScreen
+ - Listado vertical para agrupar los ads favoritos por días guardados.
+ - Listado horizontal para mostrar todos los guardados ese día.
+ - Haciendo click en el anuncio se navega al DetailFragment.
+
+### DetailFragment
+ - *HorizontalPager* para mostrar todas las imágenes del anuncio.
+ - Se amplía la información del anuncio.
+ - Se cuenta con un botón para mostrar la ubicación del anuncio a través de la app Google Maps.
+ - Se cuenta con un botón para guardar o quitar un anuncio como favorito.
+
+## Navegación
+
+- Se implementa una navegación en el *IdealistaActivity* para navegar entre *Fragments* y poder hacerlo entre el *MainFragment* y el *DetailFragment*.
+- Se implementa una navegación en el *MainFragment* a partir de una *BottomNavigation* para poder navegar entre el *HomeScreen* y el *FavoritesScreen*. 
+
 ## Pruebas
 
 Se han implementado pruebas de diferentes tipos para mostrar el manejo de las mismas por la aplicación:
