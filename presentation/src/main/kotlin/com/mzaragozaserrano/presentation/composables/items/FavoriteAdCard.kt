@@ -147,7 +147,7 @@ private fun FavoriteAdCardPrev() {
     FavoriteAdCard(
         ad = AdVO(
             currencySuffix = "€",
-            date = "2024-02-02",
+            date = "12/03/2025 00:00",
             extraInfo = listOf(
                 Info.Floor(value = "3", secondValue = "Con ascensor"),
                 Info.Rooms(value = "2"),
@@ -159,12 +159,12 @@ private fun FavoriteAdCardPrev() {
                 Parking
             ),
             hasNotInformation = false,
-            id = "12345",
+            id = "1",
             isFavorite = true,
             latitude = 40.416775,
             longitude = -3.703790,
             prefixTitle = DomainStringResource.Exterior,
-            price = "250,000",
+            price = "250.000",
             subtitle = "Piso luminoso con terraza",
             thumbnail = "https://example.com/image.jpg",
             title = "Moderno piso en el centro",
