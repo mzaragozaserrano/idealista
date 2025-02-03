@@ -1,6 +1,6 @@
 # Idealista App - Prueba Técnica
 
-Bienvenido a **La Prueba Técnica de Miguel Zaragoza para Idealista**, una aplicación diseñada para replicar la funcionalidad de la aplicación oficial, pero con un enfoque diferente en cuanto a diseño y experiencia de usuario (UX). A lo largo de este proyecto, se ha procurado respetar el color corporativo original, a la vez que se ha presentado alternativas respecto a la fluidez de la interfaz y la interacción mediante el uso de tecnologías modernas y patrones de diseño eficientes.
+Bienvenido a **La Prueba Técnica de Miguel Zaragoza para Idealista**, una aplicación diseñada para replicar la funcionalidad de la aplicación oficial, pero con un enfoque diferente en cuanto a diseño y experiencia de usuario. A lo largo de este proyecto, se ha procurado respetar el color corporativo original, a la vez que se ha presentado alternativas enfocadas especialmente a las animaciones para lograr mayor fluidez.
 
 ## Características
 
@@ -21,7 +21,7 @@ Bienvenido a **La Prueba Técnica de Miguel Zaragoza para Idealista**, una aplic
   
 - **Integración con Google Maps**: En el detalle de cada anuncio, se incluye un botón que redirige a la aplicación de **Google Maps** utilizando las coordenadas del anuncio, facilitando la localización directa de la propiedad en un mapa.
 
-- **Cargar Imágenes con Coil**: Para optimizar la carga y visualización de imágenes, se ha integrado **Coil**, asegurando un rendimiento eficiente y fluido, especialmente en la versión con **Jetpack Compose**.
+- **Cargar Imágenes con Coil**: Para optimizar la carga y visualización de imágenes, se ha integrado **Coil**, asegurando un rendimiento eficiente y fluido.
 
 ### Manejo de Datos
 - **Gson, Moshi y OkHttp3**: Se han utilizado estas bibliotecas para manejar la conversión de datos JSON a objetos de transferencia de datos (DTO) y para realizar operaciones de red eficientes. **OkHttp3** gestiona las solicitudes HTTP, mientras que **Gson** y **Moshi** se encargan de la serialización y deserialización de los datos.
@@ -34,7 +34,7 @@ La aplicación está organizada en módulos para garantizar una arquitectura lim
 2. **data**: Maneja las operaciones relacionadas con los datos, incluyendo el acceso a la red y la base de datos local.
 3. **domain**: Contiene la lógica de negocio y los casos de uso, funcionando como el núcleo de la aplicación.
 4. **presentation**: Encargado de la interfaz de usuario y la lógica de presentación, utilizando Jetpack Compose y XML según sea necesario.
-5. **core**: Un módulo customizado que contiene utilidades y componentes compartidos, lo que permite facilitar el desarrollo y la reutilización del código en diferentes aplicaciones. Aunque no se utilizó tanto como se esperaba inicialmente, este módulo proporciona una base sólida y flexible para la aplicación.
+5. **core**: Un módulo customizado que contiene utilidades y componentes compartidos, lo que permite facilitar el desarrollo y la reutilización del código en diferentes aplicaciones. Aunque no se utilizó tanto como se esperaba inicialmente, este módulo proporciona una base sólida y flexible para cualquier aplicación, especialmente en cuanto a componentes se refiere.
 
 ## Dependencias y Tecnologías
 
@@ -48,11 +48,13 @@ La aplicación está organizada en módulos para garantizar una arquitectura lim
   
 ## Pruebas
 
-Se han implementado pruebas de diferentes tipos para garantizar la calidad y estabilidad de la aplicación:
+Se han implementado pruebas de diferentes tipos para mostrar el manejo de las mismas por la aplicación:
 
-- **Pruebas Unitarias**: Se han cubierto las funcionalidades más críticas, como el **ViewModel** y las **fuentes de datos** (DataSource).
-- **Pruebas de UI**: Se han creado pruebas de **captura de pantalla (screenshot)** para validar que la interfaz de usuario se muestra correctamente en diferentes estados y situaciones.
+- **Pruebas Unitarias**: Se han cubierto las funcionalidades base como la recepción de datos de un **ViewModel** y las llamadas de los **casos de uso**.
+- **Pruebas Instrumentadas**: Se ha realizado pruebas sobre la *base de datos de favoritos de Room*, probando a añadir, obtener y eliminar los favoritos.
+- **Pruebas de UI**: Se ha creado una prueba de **captura de pantalla (screenshot)** para validar que la interfaz de usuario se muestra correctamente en su estado inicial.
 
 ## Agradecimientos
 
 Gracias por dedicar vuestro tiempo a revisar este proyecto. Espero que haya sido de vuestro agrado y quedo a la espera de cualquier feedback que queráis darme.
+Miguel.
